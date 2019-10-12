@@ -1,0 +1,26 @@
+// Priors and rules file
+// *********************
+[PARAMETERS]
+//#isInt? #name #dist.#min #max
+//all N are in number of haploid individuals
+1 TDIV unif 100 200000 output
+1 NANC unif 100 50000 output
+1 NCUR0 unif 100 50000 output
+1 NCUR1 unif 100 50000 output
+//1 NPOP0 unif 100 50000 output
+//1 NPOP1 unif 100 50000 output
+0 N0M01 logunif 1e-2 50 output
+0 N1M10 logunif 1e-2 50 output
+0 N0_Recent_M01 logunif 1e-2 50 output
+0 N1_Recent_M10 logunif 1e-2 50 output
+
+[RULES]
+
+[COMPLEX PARAMETERS]
+//0 RESIZE_0 = 2.694 output
+//0 RESIZE_1 = 11.282 output
+0 RESIZE_TOTAL = NANC/9700 output
+0 Mig_Back_0_1 = N0M01/9700 output
+0 Mig_Back_1_0 = N1M10/8800 output
+0 R_Mig_0_1 = N0_Recent_M01/3600
+0 R_Mig_1_0 = N1_Recent_M10/780
