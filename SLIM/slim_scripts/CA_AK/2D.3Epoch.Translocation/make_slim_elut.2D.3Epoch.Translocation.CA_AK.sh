@@ -139,9 +139,9 @@ $((${t} + 1))  early() {
 
 }
 
-//after burn in, calculate load every 100 generations until contraction 
+//after burn in, calculate load every 1000 generations until contraction 
 $((${t} + 1)):$((${t} + 1+ ${tdiv})) late() {
-	if (sim.generation % 100 == 0){
+	if (sim.generation % 1000 == 0){
 	//file header
 	//mutation id
 	//mutation type
@@ -199,12 +199,7 @@ $((${t} + 1+ ${tdiv})) late() {
 	p1.outputVCFSample(v_SS_AK, F,filePath=paste(c(outdir,"/slim.output.PreContraction.p1.",v_CHUNK,".vcf"),sep=""));
 	p2.outputVCFSample(v_SS_CA, F,filePath=paste(c(outdir,"/slim.output.PreContraction.p2.",v_CHUNK,".vcf"),sep=""));
 }
-//Contract after 8000 generations 
 
-$((${t} + 2+ ${tdiv})) late() {
-	p1.setSubpopulationSize(v_NU_AK);
-	p2.setSubpopulationSize(v_NU_CA);
-}
 
 //after burn in and precontraction, calculate load every 2 generations until endsim  
 $((${t} + 2+ ${tdiv})): late() {
@@ -259,13 +254,25 @@ $((${t} + 2+ ${tdiv})): late() {
 	}
 }
 }
+
+
+//Contract after 8000 generations 
+
+$((${t} + 2+ ${tdiv})) late() {
+	p1.setSubpopulationSize(v_NU_AK);
+}
+//CA bottleneck was sliightly shorter, so start 10 generations later
+$((${t} + 12+ ${tdiv})) late() {
+	p2.setSubpopulationSize(v_NU_CA);
+}
+
 //Sample before recovery
 $((${t} + 2+ ${tdiv} + ${tcontract})) late() {
 	p1.outputVCFSample(v_SS_AK, F,filePath=paste(c(outdir,"/slim.output.PreRecovery.p1.",v_CHUNK,".vcf"),sep=""));
 	p2.outputVCFSample(v_SS_CA, F,filePath=paste(c(outdir,"/slim.output.PreRecovery.p2.",v_CHUNK,".vcf"),sep=""));
 }
 
-//Recover populatoin sizes after (35?) generations. can technically have different bot durations but for now lets keep it the same for both 
+//Recover populatoin sizes after (35/25) generations. Tcontract is 35, but CA started 10 generations later
 
 $((${t} + 3+ ${tdiv} + ${tcontract})) late() {
 	p1.setSubpopulationSize(v_NREC_AK);
@@ -280,8 +287,8 @@ $((${t} + 3+ ${tdiv} + ${tcontract}+ ${trecovery})) late() {
 	p2.outputVCFSample(v_SS_CA, F,filePath=paste(c(outdir,"/slim.output.PreMigration.p2.",v_CHUNK,".vcf"),sep=""));
 }
 $((${t} + 4 + ${tdiv} + ${tcontract}+ ${trecovery})) late() {
-		p1.setMigrationRates(c(p2), c(0.005));
-		p2.setMigrationRates(c(p1), c(0.01));
+		p1.setMigrationRates(c(p2), c(0.001));
+		p2.setMigrationRates(c(p1), c(0.0004));
 		}
 //Let the simulation run into the future, then sample at the ends
 $((${t} + 4+ ${tdiv} + ${tcontract}+ ${trecovery}+${tfuture})) late() {
