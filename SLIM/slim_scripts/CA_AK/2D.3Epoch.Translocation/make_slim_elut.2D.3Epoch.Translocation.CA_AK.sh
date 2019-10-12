@@ -1,7 +1,7 @@
 pop=CA_AK
 model=2D.3Epoch.Translocation
 #model=1D.2Epoch.1.5Mb.cds.LongerContract
-gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/SLIM
+gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/SLIM
 scriptdir=$gitdir/slim_scripts/$pop/$model
 mkdir -p $scriptdir # set script dir
 todaysdate=`date +%Y%m%d`
