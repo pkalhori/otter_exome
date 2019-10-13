@@ -13,7 +13,7 @@ numStates=1 #
 checkNumber=$((numChunks*numStates))
 
 # process output of slim 
-gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/SLIM
+gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/SLIM
 # choose the specific combination of populations/models/rundates you want? this is awkward... what is best way to do it?
 # com is 3epoch (differnt model) 
 

@@ -33,7 +33,7 @@ module load gcc/6.3.0
 slim=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/software/slim_build/slim # location of slim
 
 ############## files and dirs ############
-gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/SLIM/ # project github location
+gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/SLIM/ # project github location
 scriptdir=$gitdir/slim_scripts/$pop/$model # location of slim scripts
 # this seed will account for runs run on differet days, and if they start during the same second there will also be adjustments for the run number/task id
 # it is not perfectly random, but in general few runs will set the seed at the exact time and the exactness is pretty good (598928/600000 seeds were unique when tested with a for loop)

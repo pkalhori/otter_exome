@@ -1,4 +1,5 @@
-gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/SLIM
+#gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/SLIM
+gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/SLIM
 models=2D.3Epoch.Translocation 
 #models='1D.2Epoch.1.5Mb.cds.LongerContract'
 #populations='AK AL CA COM KUR'
@@ -18,12 +19,12 @@ mkdir -p $wd
 logdir=$wd/logs
 mkdir -p $logdir
 # make the slim script:
-for h in 0
+for h in 0 0.5
 do
 sh $scriptdir/$pop/$model/make_slim_elut.${model}.${pop}.sh $h
 #done
 
-for i in {1..11}
+for i in {1..25}
 do
 # qsub -N name -o outdir -e errordir $script $pop $model $rep $rundate
 qsub -N slimRep${i}.${pop}.${model}.${h} -o $logdir -e $logdir $scriptdir/array_slim_elut.generic.sh $pop $model $i $todaysdate $h

@@ -1,0 +1,1 @@
+gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/SLIM
