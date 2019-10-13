@@ -1,9 +1,9 @@
 #gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/SLIM
 gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/SLIM
-models=2D.3Epoch.Translocation 
+models=1D.3Epoch.LongerRecovery
 #models='1D.2Epoch.1.5Mb.cds.LongerContract'
 #populations='AK AL CA COM KUR'
-populations=CA_AK # do COM separately below
+populations=CA # do COM separately below
 # loop through models, populations and 25 replicates
 scriptdir=$gitdir/slim_scripts
 

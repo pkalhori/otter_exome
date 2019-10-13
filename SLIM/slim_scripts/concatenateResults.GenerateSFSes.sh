@@ -6,8 +6,8 @@
 # Make sure they are concordant!
 
 # gather up replicates:
-numReps=11 # total number of reps you ran 
-DesiredReps=10 # how many you'll take out of the 25 (some randomly fail, so picking 20 / 25 for all)
+numReps=25 # total number of reps you ran 
+DesiredReps=20 # how many you'll take out of the 25 (some randomly fail, so picking 20 / 25 for all)
 numChunks=20 #
 numStates=1 #
 checkNumber=$((numChunks*numStates))
@@ -17,7 +17,7 @@ gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_ex
 # choose the specific combination of populations/models/rundates you want? this is awkward... what is best way to do it?
 # com is 3epoch (differnt model) 
 
-rundate=20191006 # set of simulations you're interested in (if is across different rundates you can list popsModelsRundates explicitly)
+rundate=20191012 # set of simulations you're interested in (if is across different rundates you can list popsModelsRundates explicitly)
 hs="0 0.5" # set of hs you're interested in
 popMods="CA_AK/2D.3Epoch.Translocation" # population and corresponding models you're interested in
 
