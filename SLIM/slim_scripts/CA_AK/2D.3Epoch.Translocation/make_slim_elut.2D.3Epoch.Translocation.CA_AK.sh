@@ -26,10 +26,15 @@ nu_CA=100
 tcontract=35 # contraction duration before you sample -- a longer contraction time than dadi ifnerence (more like FSC)
 trecovery=17 #1911-2019 is around 17 generations (6y/gen)
 tfuture=50 #allow simulation to continue running at recovered pop size  
-nrec_AK=2500 #not sure what population size to use; best I could find for WPWS
+nrec_AK=2500 #not sure what population size to use; best I could find for WPWSx
 nrec_CA=1000
 # this nu / T combo is within the MLE estimate for Alaska from my grid search. also want to try the California version (100 for 30 gens with smaller Nanc of ~3500)
 ######### general parameters ; can set here or in command line ##########
+
+
+migAtoC=
+migCtoA=
+
 # Set g, number of genes (exons)
 g=1000
 # Set gLen, the length of exons
@@ -43,7 +48,7 @@ mu=8.64e-9 # mutation rate
 h=$1  # loop through hs
 # Set j, the chunk number (for 14 chunks?)
 
-chr=20;
+chr=20
 #total number of chromosomes, since all "chunks" will be simulated together 
 
 
@@ -76,7 +81,9 @@ initialize() {
 	defineConstant("v_NU_AK",$nu_AK); // contraction size
 	defineConstant("v_NREC_AK",$nrec_AK); // contraction size
 	defineConstant("v_NCOMBO",$nanc_combo); // pre split time
-
+	defineConstant("migAK_CA",$migAtoC); // migration to CA from AK
+	defineConstant("migCA_AK",$migCtoA); // migration to AK from CA
+	
 
 	//cat("Exome portion length:"+seqLength+"\n");
 	initializeMutationRate(v_MU);
@@ -287,8 +294,8 @@ $((${t} + 3+ ${tdiv} + ${tcontract}+ ${trecovery})) late() {
 	p2.outputVCFSample(v_SS_CA, F,filePath=paste(c(outdir,"/slim.output.PreMigration.p2.",v_CHUNK,".vcf"),sep=""));
 }
 $((${t} + 4 + ${tdiv} + ${tcontract}+ ${trecovery})) late() {
-		p1.setMigrationRates(c(p2), c(0.001));
-		p2.setMigrationRates(c(p1), c(0.0004));
+		p1.setMigrationRates(c(p2), c(migCA_AK);
+		p2.setMigrationRates(c(p1), c(migAK_CA);
 		}
 //Let the simulation run into the future, then sample at the ends
 $((${t} + 4+ ${tdiv} + ${tcontract}+ ${trecovery}+${tfuture})) late() {
