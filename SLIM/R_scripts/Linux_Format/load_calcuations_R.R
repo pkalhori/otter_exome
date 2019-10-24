@@ -65,7 +65,7 @@ for (popModDate in popModDates){
             loadDF$W_meanFitness <- W
             loadDF$L_mutationLoad <- L
             loadDF$generation <- gen
-            loadDF$subpopulation <- spop
+            #loadDF$subpopulation <- spop
             #### combine with other reps: #####
             allLoads = rbind(allLoads,loadDF)
           }
