@@ -19,6 +19,6 @@ source /u/local/Modules/default/init/modules.sh
 module load R
 Rscript $pathToScript/$myscript
 
-mv BurnInData2D.txt $ld
+mv multiple_migs.txt $ld
  
 sleep 2m
