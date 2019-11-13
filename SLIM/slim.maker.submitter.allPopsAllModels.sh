@@ -1,7 +1,7 @@
 #gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/SLIM
 gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/SLIM
-models='2D.3Epoch.Translocation.5perGen 2D.3Epoch.Translocation.10perGen 2D.3Epoch.Translocation.25perGen'
-#models=2D.3Epoch.Translocation.1perGen
+#models='2D.3Epoch.Translocation.5perGen 2D.3Epoch.Translocation.10perGen 2D.3Epoch.Translocation.25perGen'
+models=2D.3Epoch.NoTranslocation
 #populations='AK AL CA COM KUR'
 populations=CA_AK # do COM separately below
 # loop through models, populations and 25 replicates

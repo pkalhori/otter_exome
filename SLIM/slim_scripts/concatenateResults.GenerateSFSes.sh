@@ -17,10 +17,10 @@ gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_ex
 # choose the specific combination of populations/models/rundates you want? this is awkward... what is best way to do it?
 # com is 3epoch (differnt model) 
 
-rundate=20191023 # set of simulations you're interested in (if is across different rundates you can list popsModelsRundates explicitly)
-hs="0.5" # set of hs you're interested in
+rundate=20191103 # set of simulations you're interested in (if is across different rundates you can list popsModelsRundates explicitly)
+hs="0 0.5" # set of hs you're interested in
 #popMods="CA_AK/2D.3Epoch.Translocation.1perGen CA_AK/2D.3Epoch.Translocation.5perGen CA_AK/2D.3Epoch.Translocation.10perGen CA_AK/2D.3Epoch.Translocation.25perGen" # population and corresponding models you're interested in
-popMods=CA_AK/2D.3Epoch.Translocation.25perGen
+popMods=CA_AK/2D.3Epoch.Translocation.25for2Gen
 # you can have multiple models per population just list as: AK/1D.2Epoch.1.5Mb.cds AK/OtherModel in the popMods variable
 popsModelsRundates=""
 for i in $popMods
