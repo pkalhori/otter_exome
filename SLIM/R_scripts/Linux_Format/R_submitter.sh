@@ -8,7 +8,7 @@
 
 
 pop=CA_AK
-model=2D.3Epoch.Translocation.25for2Gen
+model=2D.3Epoch.NoTranslocation
 wd=/u/scratch/p/pkalhori/slim/R_load_calc
 ld=$wd/$pop/$model
 mkdir -p $ld
