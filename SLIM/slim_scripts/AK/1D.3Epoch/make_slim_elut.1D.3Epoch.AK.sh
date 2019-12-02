@@ -112,6 +112,13 @@ initialize() {
 // then do this again after the contraction -- then only need to simulate once instead of doing 1 and 2 epoch separately. 
 ${t} late() {
 	p1.outputVCFSample(v_SS, F,filePath=paste(c(outdir,"/slim.output.PreContraction.",v_CHUNK,".vcf"),sep=""));
+			// set up outfile: 
+	writeFile(paste(c(outdir,"/slim.output.",v_CHUNK,".summary.txt"),sep=""),"replicate,chunk,generation,mutid,type,s,age,originpop,subpop,numhet,numhom,popsizeDIP\n",append=F); // open fresh file
+
+	}
+//calculate load every 2 generations until simulation ends
+${t}: late() {
+	if (sim.generation % 2 == 0){
 	//file header
 	//mutation id
 	//mutation type
@@ -123,42 +130,44 @@ ${t} late() {
 	//number of heterozygote derived in p2
 	//number of homozygote derived in p2
 	//these are genotype counts not allele counts
-	// set up outfile: 
-	writeFile(paste(c(outdir,"/slim.output.PreContraction.",v_CHUNK,".summary.txt"),sep=""),"replicate,chunk,mutid,type,s,age,subpop,p1numhet,p1numhom,popsizeDIP\n",append=F); // open fresh file
+
 	
 	//for every mutation in the simulation
-	for (mut in sim.mutations){
-		id = mut.id;
-		s = mut.selectionCoeff;
-		subpop = mut.subpopID;
-		age = sim.generation - mut.originGeneration;
-		type = mut.mutationType;
-		popsize=size(p1.individuals);
-		//initialize genotype counts
-		p1numhet = 0;
-		p1numhom = 0;
-		
-		//count hom and het derived in p1
-		for (p1i in p1.individuals){
-			gt = sum(c(p1i.genomes[1].containsMutations(mut), p1i.genomes[0].containsMutations(mut)));
-			if (gt == 1){
-				p1numhet = p1numhet + 1;
-			} else if (gt == 2){
-				p1numhom = p1numhom + 1;
+	//pops=sim.subpopulations;
+	for (pop in sim.subpopulations){
+		for (mut in sim.mutations){
+			id = mut.id;
+			s = mut.selectionCoeff;
+			generation= sim.generation - 50000;
+			originpop = mut.subpopID;
+			age = sim.generation - mut.originGeneration;
+			type = mut.mutationType;
+			popsize = size(pop.individuals);
+			popID= pop.id;
+			//initialize genotype counts
+			pnumhet = 0;
+			pnumhom = 0;
+			
+			//count hom and het derived in p1
+			for (p1i in pop.individuals){
+				gt = sum(c(p1i.genomes[1].containsMutations(mut), p1i.genomes[0].containsMutations(mut)));
+				if (gt == 1){
+					pnumhet = pnumhet + 1;
+				} else if (gt == 2){
+					pnumhom = pnumhom + 1;
+				}
 			}
+					// string for mutation type. add m3, m4, etc. if you have multiple types
+			if (type == m1){
+				type = "m1";
+			} else if (type == m2){
+				type = "m2";
+			}
+			//print results
+		writeFile(paste(c(outdir,"/slim.output.",v_CHUNK,".summary.txt"),sep=""),paste(c(v_REP,v_CHUNK,generation,id,type,s,age,originpop,popID,pnumhet,pnumhom,popsize),sep=","),append=T);
 		}
-		
-	
-		// string for mutation type. add m3, m4, etc. if you have multiple types
-		if (type == m1){
-			type = "m1";
-		} else if (type == m2){
-			type = "m2";
-		}
-		
-		//print results
-		writeFile(paste(c(outdir,"/slim.output.PreContraction.",v_CHUNK,".summary.txt"),sep=""),paste(c(v_REP,v_CHUNK,id,type,s,age,subpop,p1numhet,p1numhom,popsize),sep=","),append=T);
 	}
+}
 }
 
 // contract the population 1 gen after burn in:
@@ -168,54 +177,7 @@ $((${t} + 1)) {
 // Then keep it contracted for an additional +tContract
 $((${t} + 1+ ${tcontract})) late() {
 	p1.outputVCFSample(v_SS, F,filePath=paste(c(outdir,"/slim.output.PostContraction.",v_CHUNK,".vcf"),sep=""));
-	//file header
-	//mutation id
-	//mutation type
-	//selection coefficient
-	//age of mutation in generations
-	//subpopulation it arose in
-	//number of heterozygote derived in p1
-	//number of homozygote derived in p1
-	//number of heterozygote derived in p2
-	//number of homozygote derived in p2
-	//these are genotype counts not allele counts
-	// set up outfile: 
-	writeFile(paste(c(outdir,"/slim.output.PostContraction.",v_CHUNK,".summary.txt"),sep=""),"replicate,chunk,mutid,type,s,age,subpop,p1numhet,p1numhom,popsizeDIP\n",append=F); // open fresh file
-	
-	//for every mutation in the simulation
-	for (mut in sim.mutations){
-		id = mut.id;
-		s = mut.selectionCoeff;
-		subpop = mut.subpopID;
-		age = sim.generation - mut.originGeneration;
-		type = mut.mutationType;
-		
-		//initialize genotype counts
-		popsize=size(p1.individuals);
-		p1numhet = 0;
-		p1numhom = 0;
-		
-		//count hom and het derived in p1
-		for (p1i in p1.individuals){
-			gt = sum(c(p1i.genomes[1].containsMutations(mut), p1i.genomes[0].containsMutations(mut)));
-			if (gt == 1){
-				p1numhet = p1numhet + 1;
-			} else if (gt == 2){
-				p1numhom = p1numhom + 1;
-			}
-		}
-		
-	
-		// string for mutation type. add m3, m4, etc. if you have multiple types
-		if (type == m1){
-			type = "m1";
-		} else if (type == m2){
-			type = "m2";
-		}
-		
-		//print results
-		writeFile(paste(c(outdir,"/slim.output.PostContraction.",v_CHUNK,".summary.txt"),sep=""),paste(c(v_REP,v_CHUNK,id,type,s,age,subpop,p1numhet,p1numhom,popsize),sep=","),append=T);
-	}
+
 }
 // expand the population 1 generation after sampling:
 $((${t} + 2 + ${tcontract})) {
@@ -224,53 +186,6 @@ $((${t} + 2 + ${tcontract})) {
 // Proceed for trecovery until the present day, then sample
 $((${t} + 2+ ${tcontract}+${trecovery})) late() {
 	p1.outputVCFSample(v_SS, F,filePath=paste(c(outdir,"/slim.output.PostRecovery.",v_CHUNK,".vcf"),sep=""));
-	//file header
-	//mutation id
-	//mutation type
-	//selection coefficient
-	//age of mutation in generations
-	//subpopulation it arose in
-	//number of heterozygote derived in p1
-	//number of homozygote derived in p1
-	//number of heterozygote derived in p2
-	//number of homozygote derived in p2
-	//these are genotype counts not allele counts
-	// set up outfile: 
-	writeFile(paste(c(outdir,"/slim.output.PostRecovery.",v_CHUNK,".summary.txt"),sep=""),"replicate,chunk,mutid,type,s,age,subpop,p1numhet,p1numhom,popsizeDIP\n",append=F); // open fresh file
-	
-	//for every mutation in the simulation
-	for (mut in sim.mutations){
-		id = mut.id;
-		s = mut.selectionCoeff;
-		subpop = mut.subpopID;
-		age = sim.generation - mut.originGeneration;
-		type = mut.mutationType;
-		
-		//initialize genotype counts
-		popsize=size(p1.individuals);
-		p1numhet = 0;
-		p1numhom = 0;
-		
-		//count hom and het derived in p1
-		for (p1i in p1.individuals){
-			gt = sum(c(p1i.genomes[1].containsMutations(mut), p1i.genomes[0].containsMutations(mut)));
-			if (gt == 1){
-				p1numhet = p1numhet + 1;
-			} else if (gt == 2){
-				p1numhom = p1numhom + 1;
-			}
-		}
-		
-	
-		// string for mutation type. add m3, m4, etc. if you have multiple types
-		if (type == m1){
-			type = "m1";
-		} else if (type == m2){
-			type = "m2";
-		}
-		
-		//print results
-		writeFile(paste(c(outdir,"/slim.output.PostRecovery.",v_CHUNK,".summary.txt"),sep=""),paste(c(v_REP,v_CHUNK,id,type,s,age,subpop,p1numhet,p1numhom,popsize),sep=","),append=T);
-	}
+
 }
 EOM
