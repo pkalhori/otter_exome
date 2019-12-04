@@ -16,7 +16,7 @@ allLoads2<- read.table(paste(data.dir,popModDate2,"migs_data.txt",sep = ""), hea
 ##no mig
 allLoads3 <- read.table(paste(data.dir,popModDate3,"load_data.txt",sep = ""), header = T) 
 
-allLoads<- rbind.data.frame(allLoads,allLoads2, allLoads3)
+allLoads<- rbind.data.frame(allLoads3)
 
 # label H:
 
@@ -62,9 +62,12 @@ class(allLoads_means_se)
 
 levels(as.factor(allLoads_means_se$migLabel))
 allLoads_means_se$migLabel <- factor(allLoads_means_se$migLabel,levels=c("No Migrants", "1 ind/gen" ,"5 ind/gen", "10 ind/gen", "25 ind/gen", "25 ind for 2 gen"))
+
+
+
 p2 <- 
-  ggplot(allLoads_means_se,aes(x=generation,y=mean_load, colour=migLabel))+
-  geom_line(position=position_dodge(.5),size = 1,alpha=0.5)+
+  ggplot(allLoads_means_se,aes(x=generation,y=mean_load))+
+  geom_line(position=position_dodge(.5),size = 1,alpha=0.5,color="blue")+
   #stat_summary(fun.y = "mean", geom = "point", size = 1, color=model)+
   #stat_summary(fun.y = "mean", geom = "line", size = 0.5)+
   theme_bw()+
@@ -72,14 +75,14 @@ p2 <-
   ylab("Genetic Load")+
   xlab("Generation") +
   theme(legend.position = "left")+
-  ggtitle("Genetic Load for 3 Epoch Model With Translocation")+
+  ggtitle("Genetic Load for 3 Epoch Model")+
   facet_grid(hLabel~subpopulation,scales="free")+
 
   #stat_summary(fun.data = allLoads_means_se, geom = "errorbar")+
-  #geom_errorbar(data=allLoads_means_se, mapping=aes(ymin=lower_limit,ymax=upper_limit))+
-  geom_vline(data=dates_df, aes(xintercept=dates))+
+  geom_errorbar(data=allLoads_means_se, mapping=aes(ymin=lower_limit,ymax=upper_limit),color="green",size=0.1)+
+  geom_vline(data=dates_df, aes(xintercept=dates))
   
-  theme(legend.title=element_blank())
+  #theme(legend.title=element_blank())
 
 
 p3 <- 
@@ -93,12 +96,12 @@ p3 <-
   ylab("Genetic Load")+
   xlab("Generation") +
   theme(legend.position = "left")+
-  ggtitle("Genetic Load for 3 Epoch Model With Translocation")+
+  ggtitle("Genetic Load for 3 Epoch Model")
   
   
   #stat_summary(fun.data = allLoads_means_se, geom = "errorbar")+
   #geom_errorbar(data=allLoads_means_se, mapping=aes(ymin=lower_limit,ymax=upper_limit))+
-  theme(legend.title=element_blank())
+  #theme(legend.title=element_blank())
               
 class(allLoads$subpopulation)
 dates<-as.data.frame(dates)
@@ -112,18 +115,11 @@ as.tibble(dates)
 
 
 plot.dir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\genetic_load_calcs\\"
-ggsave(paste(plot.dir,"Multiple_Migs.NoError",todaysdate,".pdf",sep=""),p2,height=6,width=8)
+ggsave(paste(plot.dir,"3Epoch_BothPops",todaysdate,".pdf",sep=""),p2,height=6,width=8)
 
 
 
 
-
-
-max(allLoads$L_mutationLoad[allLoads$h==0])
-min(allLoads$L_mutationLoad[allLoads$h==0])
-mean(allLoads$L_mutationLoad[allLoads$h==0 & allLoads$generation==96])
-mean(allLoads$L_mutationLoad[allLoads$h==0 & allLoads$generation==0])
-mean(allLoads$L_mutationLoad[allLoads$h==0 & allLoads$generation==28])
 
 library(dplyr)
 ####Pre and Post contraction boxplots withhout translocation
@@ -131,7 +127,7 @@ allLoads$hLabel <- paste("h = ",allLoads$h)
 allLoads <- allLoads[allLoads$generation>=8000,]
 allLoads$subpopulation[allLoads$subpopulation==1] <- "AK"
 allLoads$subpopulation[allLoads$subpopulation==2] <- "CA"
-boxplot_loads <- allLoads3[allLoads3$generation%in%c(8002,8012,8038),]
+boxplot_loads <- allLoads[allLoads$generation%in%c(8002,8012,8038),]
 
 
 boxplot_loads$state<-NA
@@ -143,7 +139,7 @@ boxplot_loads$miglabel<- NA
 boxplot_loads$state <- factor(boxplot_loads$state,levels=c("PreContraction","PostContraction"))
 p1 <- 
   ggplot(boxplot_loads,aes(x=state,y=L_mutationLoad))+
-  facet_wrap(hLabel~interaction(boxplot_loads$subpopulation))+
+  facet_grid(hLabel~interaction(boxplot_loads$subpopulation))+
   geom_boxplot()+
 
   #theme_bw()+
@@ -152,9 +148,8 @@ p1 <-
   ylab("Genetic Load")+
   xlab("State") +
   #theme(legend.position = "left")+
-  ggtitle("Genetic Load for 3 Epoch Model With Translocation")
-?geom_boxplot 
-  
-  #stat_summary(fun.data = allLoads_means_se, geom = "errorbar")+
-  #geom_errorbar(data=allLoads_means_se, mapping=aes(ymin=lower_limit,ymax=upper_limit))+
-  #theme(legend.title=element_blank())
+  ggtitle("Genetic Load Before and After Contraction")
+ggsave(paste(plot.dir,"Boxplot_BothPops",todaysdate,".pdf",sep=""),p1,height=6,width=8)
+
+AK_means <- allLoads_means_se[allLoads_means_se$subpopulation=="AK",]
+max(CA_means$mean_load)
