@@ -21,7 +21,7 @@ nanc_combo=4500
 nanc_AK=4500 # a ball park Nanc for AK
 nu_AK=250
 nanc_CA=3500
-nu_CA=100
+nu_CA=200
  # contraction size  -- a medium contraction size
 tcontract=35 # contraction duration before you sample -- a longer contraction time than dadi ifnerence (more like FSC)
 trecovery=17 #1911-2019 is around 17 generations (6y/gen)
@@ -267,11 +267,9 @@ $((${t} + 2+ ${tdiv})): late() {
 
 $((${t} + 2+ ${tdiv})) late() {
 	p1.setSubpopulationSize(v_NU_AK);
-}
-//CA bottleneck was sliightly shorter, so start 10 generations later
-$((${t} + 12+ ${tdiv})) late() {
 	p2.setSubpopulationSize(v_NU_CA);
 }
+
 
 //Sample before recovery
 $((${t} + 2+ ${tdiv} + ${tcontract})) late() {

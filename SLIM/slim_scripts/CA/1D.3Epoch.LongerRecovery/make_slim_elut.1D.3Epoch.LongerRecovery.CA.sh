@@ -10,7 +10,7 @@ todaysdate=`date +%Y%m%d`
 ########## population specific parameters ########
 # set sample size for vcf (should match empirical for AK)
 # can set manually or pull from a table
-ss=7 # in diploids # will depend on population, note you can find these in projectionValues.txt file
+ss=6 # in diploids # will depend on population, note you can find these in projectionValues.txt file
 #population	ProjectionValueHaploids Diploids
 #KUR	12	6
 #CA	12	6
@@ -19,8 +19,8 @@ ss=7 # in diploids # will depend on population, note you can find these in proje
 #AL	20	10
 # variables:
 nanc=3500 # a ball park Nanc for AK
-nu=100 # contraction size  -- a medium contraction size
-tcontract=25 # contraction duration before you sample -- a longer contraction time than dadi ifnerence (more like FSC)
+nu=200 # contraction size  -- a medium contraction size
+tcontract=35 # contraction duration before you sample -- a longer contraction time than dadi ifnerence (more like FSC)
 trecovery=17 #1911-2019 is around 17 generations (6y/gen)
 tfuture=50 #allow simulation to continue running at recovered pop size  
 nrec=1000 #not sure what population size to use; best I could find for WPWS

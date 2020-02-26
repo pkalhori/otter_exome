@@ -8,16 +8,18 @@ popModDate2=c("CA_AK\\2D.3Epoch.Translocation\\20191023\\")
 popModDate3=c("CA_AK\\2D.3Epoch.Translocation\\20191113\\")
 
 ##mig burst
-allLoads<- read.table(paste(data.dir,popModDate,"25for2Gen.txt",sep = ""), header = T)
+allLoads1<- read.table(paste(data.dir,popModDate,"25for2Gen.txt",sep = ""), header = T)
 
 #cntinual mig
 allLoads2<- read.table(paste(data.dir,popModDate2,"migs_data.txt",sep = ""), header = T) 
 
 ##no mig
-allLoads3 <- read.table(paste(data.dir,popModDate3,"load_data.txt",sep = ""), header = T) 
+allLoads3 <- read.table(paste(data.dir,popModDate3,"nomig_data.txt",sep = ""), header = T) 
 
-allLoads<- rbind.data.frame(allLoads3)
-
+allLoads<- rbind.data.frame(allLoads1,allLoads2,allLoads3)
+?write.csv
+write.csv(allLoads,file="translocation_data.csv",row.names = FALSE)
+getwd()
 # label H:
 
 allLoads$hLabel <- paste("h = ",allLoads$h)
