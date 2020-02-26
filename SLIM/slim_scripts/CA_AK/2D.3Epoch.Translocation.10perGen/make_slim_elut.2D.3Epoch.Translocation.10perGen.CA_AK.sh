@@ -41,7 +41,7 @@ g=1000
 gLen=1500
 # Set t, number of burn-in generations
 t=50000
-tdiv=8000
+tdiv=4000
 # set mutation rate
 mu=8.64e-9 # mutation rate
 # Set h, dominance coefficient
@@ -134,15 +134,62 @@ initialize() {
 //Sample After burn in 
 
 ${t} late() {
-	p1.outputVCFSample(v_SS_AK, F,filePath=paste(c(outdir,"/slim.output.PreSplit.",v_CHUNK,".vcf"),sep=""));
+			// set up outfile: 
+	writeFile(paste(c(outdir,"/slim.output.",v_CHUNK,".summary.txt"),sep=""),"replicate,chunk,generation,mutid,type,s,age,originpop,subpop,numhet,numhom,popsizeDIP\n",append=F); // open fresh file
+	//file header
+	//mutation id
+	//mutation type
+	//selection coefficient
+	//age of mutation in generations
+	//subpopulation it arose in
+	//number of heterozygote derived in p1
+	//number of homozygote derived in p1
+	//number of heterozygote derived in p2
+	//number of homozygote derived in p2
+	//these are genotype counts not allele counts
+
+	
+	//for every mutation in the simulation
+	//pops=sim.subpopulations;
+	for (pop in sim.subpopulations){
+		for (mut in sim.mutations){
+			id = mut.id;
+			s = mut.selectionCoeff;
+			generation= sim.generation - 50000;
+			originpop = mut.subpopID;
+			age = sim.generation - mut.originGeneration;
+			type = mut.mutationType;
+			popsize = size(pop.individuals);
+			popID= pop.id;
+			//initialize genotype counts
+			pnumhet = 0;
+			pnumhom = 0;
+			
+			//count hom and het derived in p1
+			for (p1i in pop.individuals){
+				gt = sum(c(p1i.genomes[1].containsMutations(mut), p1i.genomes[0].containsMutations(mut)));
+				if (gt == 1){
+					pnumhet = pnumhet + 1;
+				} else if (gt == 2){
+					pnumhom = pnumhom + 1;
+				}
+			}
+					// string for mutation type. add m3, m4, etc. if you have multiple types
+			if (type == m1){
+				type = "m1";
+			} else if (type == m2){
+				type = "m2";
+			}
+			//print results
+		writeFile(paste(c(outdir,"/slim.output.",v_CHUNK,".summary.txt"),sep=""),paste(c(v_REP,v_CHUNK,generation,id,type,s,age,originpop,popID,pnumhet,pnumhom,popsize),sep=","),append=T);
+		}
+	}
 	}
 
 //Burn in 50,000 generations, then split pops. Use CA params for p2 Resize p1 to the AK parameters
 $((${t} + 1))  early() {
 	sim.addSubpopSplit("p2",v_NANC_CA,p1);
 	p1.setSubpopulationSize(v_NANC_AK);
-		// set up outfile: 
-	writeFile(paste(c(outdir,"/slim.output.",v_CHUNK,".summary.txt"),sep=""),"replicate,chunk,generation,mutid,type,s,age,originpop,subpop,numhet,numhom,popsizeDIP\n",append=F); // open fresh file
 
 }
 
@@ -263,7 +310,7 @@ $((${t} + 2+ ${tdiv})): late() {
 }
 
 
-//Contract after 8000 generations 
+//Contract after 4000 generations 
 
 $((${t} + 2+ ${tdiv})) late() {
 	p1.setSubpopulationSize(v_NU_AK);
