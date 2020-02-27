@@ -22,7 +22,7 @@ nanc=3500 # a ball park Nanc for AK
 nu=200 # contraction size  -- a medium contraction size
 tcontract=35 # contraction duration before you sample -- a longer contraction time than dadi ifnerence (more like FSC)
 trecovery=17 #1911-2019 is around 17 generations (6y/gen)
-tfuture=50 #allow simulation to continue running at recovered pop size  
+tfuture=383 #allow simulation to continue running at recovered pop size  
 nrec=1000 #not sure what population size to use; best I could find for WPWS
 # this nu / T combo is within the MLE estimate for Alaska from my grid search. also want to try the California version (100 for 30 gens with smaller Nanc of ~3500)
 ######### general parameters ; can set here or in command line ##########
