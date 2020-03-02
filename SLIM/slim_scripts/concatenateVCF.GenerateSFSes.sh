@@ -6,10 +6,10 @@
 # Make sure they are concordant!
 
 # gather up replicates:
-numReps=11 # total number of reps you ran 
-DesiredReps=10 # how many you'll take out of the 25 (some randomly fail, so picking 20 / 25 for all)
+numReps=25 # total number of reps you ran 
+DesiredReps=20 # how many you'll take out of the 25 (some randomly fail, so picking 20 / 25 for all)
 numChunks=20 #
-numStates=4 #
+numStates=53 #
 checkNumber=$((numChunks*numStates))
 
 # process output of slim 
@@ -17,7 +17,7 @@ gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_ex
 # choose the specific combination of populations/models/rundates you want? this is awkward... what is best way to do it?
 # com is 3epoch (differnt model) 
 
-rundate=20190918 # set of simulations you're interested in (if is across different rundates you can list popsModelsRundates explicitly)
+rundate=20191201_scratch # set of simulations you're interested in (if is across different rundates you can list popsModelsRundates explicitly)
 hs="0 0.5" # set of hs you're interested in
 popMods="AK/1D.3Epoch.LongerBurnIn" # population and corresponding models you're interested in
 
@@ -37,7 +37,7 @@ done # this sets up your list of pops, models, rundates and Hs in a list that lo
 # popsModelsRundates='AK/1D.2Epoch.1.5Mb.cds/20190423/h_0.5/ AL/1D.2Epoch.1.5Mb.cds/20190423/h_0.5/ CA/1D.2Epoch.1.5Mb.cds/20190423/h_0.5/ KUR/1D.2Epoch.1.5Mb.cds/20190423/h_0.5/' # maybe? -- this is kind of awkward, maybe have to deal with diff populations differently?
 # not ready yet: COM/1D.3Epoch.1.5Mb.cds/20190423/h_0.5/
 # loop through models, populations and 25 replicates
-scriptdir=$gitdir/slim_scripts/
+scriptdir=$gitdir/slim_scripts
 wd=$SCRATCH/slim/ 
 
 ################### first get lists of which runs worked #################
@@ -52,7 +52,7 @@ pop=${popsModelsRundate%/*/*/*} #
 # use a little script I made to detect the ones that passed and make lists
 # usage script.sh [popModel] [total reps run] [Desired replicates to pull out] [numChunks per replicate to check for completeness] [number of states per replicate (e.g. pre and post contraction)]
 chmod +x $scriptdir/FigureOutWhichRunsPassed.summary.sh # make sure it's executable
-$scriptdir/FigureOutWhichRunsPassed.sh $popsModelsRundate $numReps $DesiredReps $numChunks $numStates # this will make files of the ones that passed 
+$scriptdir/FigureOutWhichRunsPassed.summary.sh $popsModelsRundate $numReps $DesiredReps $numChunks $numStates # this will make files of the ones that passed 
 passingFile=passingReps.FIRST.${DesiredReps}.usethis.txt 
 # make sure the file exists and is $DesiredReps long 
 if [ ! -f $wd/$popsModelsRundate/$passingFile ]
@@ -72,20 +72,20 @@ mkdir -p $vcfOutDir
 mkdir -p $sfsDir
 
 states="PreContraction PostContraction PostRecovery EndSimulation"
-#for k in $(seq 50002 2 50034)
-#do
-#states="$states Contraction.${k}gen"
-#done
+for k in $(seq 50002 2 50034)
+do
+states="$states Contraction.${k}gen"
+done
 
-#for l in $(seq 50038 2 50052)
-#do
-#states="$states Recovery.${l}gen"
-#done
+for l in $(seq 50038 2 50052)
+do
+states="$states Recovery.${l}gen"
+done
 
-#for m in $(seq 50056 2 50104)
-#do
-#states="$states Future.${m}gen"
-#done
+for m in $(seq 50056 2 50104)
+do
+states="$states Future.${m}gen"
+done
 
 ##states="PreContraction PostContraction PostRecovery SpillRecovery.${j}gen PostSpill"
 
