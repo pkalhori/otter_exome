@@ -1,8 +1,8 @@
 //Number of population samples (demes)
 2
 //Population effective sizes (number of genes)
-780
-620
+8800
+7100
 //Sample sizes
 14
 12
@@ -12,9 +12,7 @@
 //Number of migration matrices : 0 implies no migration between demes
 0
 //historical event: time, source, sink, migrants, new size, new growth rate, migr. matrix
-3 historical events
-56 0 0 0 11.28 0 0
-73 1 1 0 11.45 0 0
+1 historical events
 TDIV 1 0 1 RESIZE 0 0
 //Number of independent loci [chromosome]
 1 0

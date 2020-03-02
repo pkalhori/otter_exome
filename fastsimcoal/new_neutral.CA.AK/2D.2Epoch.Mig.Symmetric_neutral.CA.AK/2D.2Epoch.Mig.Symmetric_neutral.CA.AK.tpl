@@ -10,7 +10,10 @@ NPOP1
 0
 0
 //Number of migration matrices : 0 implies no migration between demes
-0
+1
+//Migration matrix 0
+0 Mig
+Mig 0
 //historical event: time, source, sink, migrants, new size, new growth rate, migr. matrix
 1 historical events
 TDIV 1 0 1 RESIZE 0 0

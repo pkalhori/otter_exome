@@ -1,8 +1,8 @@
 //Number of population samples (demes)
 2
 //Population effective sizes (number of genes)
-NPOP0
-NPOP1
+250
+200
 //Sample sizes
 14
 12
@@ -12,8 +12,10 @@ NPOP1
 //Number of migration matrices : 0 implies no migration between demes
 0
 //historical event: time, source, sink, migrants, new size, new growth rate, migr. matrix
-1 historical events
-TDIV 1 0 1 RESIZE 0 0
+3 historical events
+35 0 0 0 RESIZE_0 0 0
+35 1 1 0 RESIZE_1 0 0
+TDIV 1 0 1 RESIZE_TOTAL 0 0
 //Number of independent loci [chromosome]
 1 0
 //Per chromosome: Number of linkage blocks
