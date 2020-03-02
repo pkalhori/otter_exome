@@ -11,7 +11,7 @@ data.dir="/u/scratch/p/pkalhori/slim/concattedSummaries/"
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
 
 #popModDates=c("CA_AK/2D.3Epoch.Translocation.1perGen/20191023","CA_AK/2D.3Epoch.Translocation.5perGen/20191023","CA_AK/2D.3Epoch.Translocation.10perGen/20191023","CA_AK/2D.3Epoch.Translocation.25perGen/20191023")
-popModDates=c("AK/1D.3Epoch.LongerRecovery/20191202")
+popModDates=c("AK/1D.5Epoch/20191203")
 #popModDates=c("AK/1D.2Epoch.1.5Mb.cds/20190424/","AK/1D.2Epoch.1.5Mb.cds.LongerContract/20190607","genericPop/1D.2Epoch.1.5Mb.cds.20KAncSize/20190611") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 #reps=c(seq(1,23))
 
@@ -38,19 +38,19 @@ print(infile)
         # pull out population etc from popModDate
        #loadDF <- data.frame(population=pop)  
         generations<- unique(input$generation)
-        subpops=c(1,2)
+        #subpops=c(1,2)
         
         for (gen in generations){
 print(gen)
-          for (spop in subpops){
-            input$qFreq[input$generation==gen & input$subpop==spop] <- (input$numhet[input$generation==gen & input$subpop==spop] + (2*input$numhom[input$generation==gen & input$subpop==spop])) / (2*input$popsizeDIP[input$generation==gen & input$subpop==spop])
-            input$pFreq[input$generation==gen & input$subpop==spop] <- 1 - input$qFreq[input$generation==gen & input$subpop==spop]
+          #for (spop in subpops){
+            input$qFreq[input$generation==gen] <- (input$numhet[input$generation==gen] + (2*input$numhom[input$generation==gen])) / (2*input$popsizeDIP[input$generation==gen])
+            input$pFreq[input$generation==gen] <- 1 - input$qFreq[input$generation==gen]
             # equation is, per site: 2hspq + sq^2 is the contribution to load; p = 1-qFreq
             # my "s" is negative, so I want to absolute value s --> |s|
-            input$loadComponent[input$generation==gen & input$subpop==spop] <- (2*h*abs(input$s[input$generation==gen & input$subpop==spop])*input$qFreq[input$generation==gen & input$subpop==spop]*input$pFreq[input$generation==gen & input$subpop==spop]) + (abs(input$s[input$generation==gen & input$subpop==spop])*((input$qFreq[input$generation==gen & input$subpop==spop])^2))
+            input$loadComponent[input$generation==gen] <- (2*h*abs(input$s[input$generation==gen])*input$qFreq[input$generation==gen]*input$pFreq[input$generation==gen]) + (abs(input$s[input$generation==gen])*((input$qFreq[input$generation==gen])^2))
             # total sites:
             
-            S = sum(input$loadComponent[input$generation==gen & input$subpop==spop])
+            S = sum(input$loadComponent[input$generation==gen])
             W = exp(-S) # mean fitness e^-S
             L  = 1 - W # mutation load 
             #### add to dataframe: #####
@@ -67,10 +67,10 @@ print(gen)
             loadDF$W_meanFitness <- W
             loadDF$L_mutationLoad <- L
             loadDF$generation <- gen
-            loadDF$subpopulation <- spop
+            #loadDF$subpopulation <- spop
             #### combine with other reps: #####
             allLoads = rbind(allLoads,loadDF)
-          }
+          #}
           
           
         }
@@ -78,6 +78,6 @@ print(gen)
     }
   }
 }
-write.table(allLoads, file="load_data.txt",quote = F, row.names = F, sep="\t")
+write.table(allLoads, file="AK_data.txt",quote = F, row.names = F, sep="\t")
 
 
