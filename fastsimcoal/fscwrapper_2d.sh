@@ -28,9 +28,9 @@ cd $wd
 header=${model}_${pop}_$rundate
 mkdir $header
 cd $header
-cp $gitdir/new_neutral.CA.AK/${model}_${pop}.tpl ./
-cp $gitdir/new_neutral.CA.AK/${model}_${pop}.est ./
-cp $gitdir/SFSes/${pop}_jointMAFpop1_0.obs ./
+cp $gitdir/new_neutral.CA.AK/${model}_${pop}/${model}_${pop}.tpl ./
+cp $gitdir/new_neutral.CA.AK/${model}_${pop}/${model}_${pop}.est ./
+cp $gitdir/SFSes/${pop}_jointMAFpop1_0.obs ${model}_${pop}_jointMAFpop1_0.obs
 mkdir $wd/$header/run_${SGE_TASK_ID}
 cd $wd/$header/run_${SGE_TASK_ID}
 cp $wd/$header/${model}_${pop}.tpl $wd/$header/${model}_${pop}.est $wd/$header/${model}_${pop}_jointMAFpop1_0.obs ./

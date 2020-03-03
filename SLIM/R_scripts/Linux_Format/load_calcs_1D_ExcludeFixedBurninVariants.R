@@ -1,4 +1,9 @@
 require(ggplot2)
+
+#install.packages("dplyr")
+#install.packages("tidyverse")
+library(tidyverse)
+library(dplyr)
 todaysdate=format(Sys.Date(),format="%Y%m%d")
 
 data.dir="/u/scratch/p/pkalhori/slim/concattedSummaries/"
@@ -9,7 +14,7 @@ outdir="/u/scratch/p/pkalhori/slim/R_load_calc/CA"
 #models=c("1D.2Epoch.1.5Mb.cds")
 #simdates=c(20190424,20190607)
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
-popModDates=c("CA/1D.3Epoch.LongerRecovery/20200227/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
+popModDates=c("CA/1D.3Epoch.LongerRecovery/20200226/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 #reps=c(seq(1,23))
 reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
 hset=c(0,0.5)
@@ -81,12 +86,12 @@ for(h in hset){
   }}}}
   
 # label h:
-allAvgdInputs$hLabel <- ""
-allAvgdInputs[allAvgdInputs$h==0,]$hLabel <- "h = 0 (rec.)"
-allAvgdInputs[allAvgdInputs$h==0.5,]$hLabel <- "h = 0.5 (add.)"
-allLoads$hLabel <- ""
-allLoads[allLoads$h==0,]$hLabel <- "h = 0 (rec.)"
-allLoads[allLoads$h==0.5,]$hLabel <- "h = 0.5 (add.)"
+#allAvgdInputs$hLabel <- ""
+#allAvgdInputs[allAvgdInputs$h==0,]$hLabel <- "h = 0 (rec.)"
+#allAvgdInputs[allAvgdInputs$h==0.5,]$hLabel <- "h = 0.5 (add.)"
+#allLoads$hLabel <- ""
+#allLoads[allLoads$h==0,]$hLabel <- "h = 0 (rec.)"
+#allLoads[allLoads$h==0.5,]$hLabel <- "h = 0.5 (add.)"
 ## want to write this out as a table so don't have to do it multiple times ###
 write.table(allAvgdInputs,paste(outdir,todaysdate,"AvgHomozygousDerivedGTs.PerInd.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
 write.table(allLoads,paste(outdir,todaysdate,"LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")

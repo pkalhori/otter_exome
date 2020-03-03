@@ -7,20 +7,20 @@
 #$ -M pkalhori
 
 
-pop=AK
-model=1D.5Epoch
+pop=CA
+#model=1D.3Epoch.LongerRecovery
 wd=/u/scratch/p/pkalhori/slim/R_load_calc
 ld=$wd/$pop/$model
 mkdir -p $ld
 
 pathToScript=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/SLIM/R_scripts/Linux_Format
-myscript=load_calcs_1D.R
+myscript=load_calcs_1D_ExcludeFixedBurninVariants.R
 
 source /u/local/Modules/default/init/modules.sh
 module load R
 Rscript $pathToScript/$myscript
 
-cp AK_data.txt $ld
+#cp AK_data.txt $ld
 
  
 sleep 2m
