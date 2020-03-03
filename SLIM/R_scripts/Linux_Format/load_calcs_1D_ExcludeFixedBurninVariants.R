@@ -81,12 +81,12 @@ for(h in hset){
   }}}}
   
 # label h:
-allAvgdInputs$hLabel <- ""
-allAvgdInputs[allAvgdInputs$h==0,]$hLabel <- "h = 0 (rec.)"
-allAvgdInputs[allAvgdInputs$h==0.5,]$hLabel <- "h = 0.5 (add.)"
-allLoads$hLabel <- ""
-allLoads[allLoads$h==0,]$hLabel <- "h = 0 (rec.)"
-allLoads[allLoads$h==0.5,]$hLabel <- "h = 0.5 (add.)"
+#allAvgdInputs$hLabel <- ""
+#allAvgdInputs[allAvgdInputs$h==0,]$hLabel <- "h = 0 (rec.)"
+#allAvgdInputs[allAvgdInputs$h==0.5,]$hLabel <- "h = 0.5 (add.)"
+#allLoads$hLabel <- ""
+#allLoads[allLoads$h==0,]$hLabel <- "h = 0 (rec.)"
+#allLoads[allLoads$h==0.5,]$hLabel <- "h = 0.5 (add.)"
 ## want to write this out as a table so don't have to do it multiple times ###
 write.table(allAvgdInputs,paste(outdir,todaysdate,"AvgHomozygousDerivedGTs.PerInd.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
 write.table(allLoads,paste(outdir,todaysdate,"LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
