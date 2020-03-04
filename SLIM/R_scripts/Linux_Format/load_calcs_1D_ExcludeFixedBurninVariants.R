@@ -2,12 +2,12 @@ require(ggplot2)
 
 #install.packages("dplyr")
 #install.packages("tidyverse")
-library(tidyverse)
+#library(tidyverse)
 library(dplyr)
 todaysdate=format(Sys.Date(),format="%Y%m%d")
 
 data.dir="/u/scratch/p/pkalhori/slim/concattedSummaries/"
-outdir="/u/scratch/p/pkalhori/slim/R_load_calc/CA"
+outdir="/u/scratch/p/pkalhori/slim/R_load_calc/CA/"
 #plot.dir="/Users/annabelbeichman/Documents/UCLA/Otters/OtterExomeProject/results/analysisResults/slim/poonehSimulations/loadCalcs/"
 #dir.create(plot.dir)
 #pops=c("AK","AL","genericPop.LongerContract")
@@ -16,7 +16,7 @@ outdir="/u/scratch/p/pkalhori/slim/R_load_calc/CA"
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
 popModDates=c("CA/1D.3Epoch.LongerRecovery/20200226/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 #reps=c(seq(1,23))
-reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
+reps=c(seq(1,2)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
 hset=c(0,0.5)
 #states=c("PreContraction","PostContraction")
 allAvgdInputs=data.frame()
@@ -30,6 +30,7 @@ for(h in hset){
   infile=paste(data.dir,popModDate,"/h_",h,"/replicate_",rep,".slim.output.allConcatted.summary.txt.gz",sep="")
   if(file.exists(infile)){
     input = read.table(infile,sep=",",header=T)
+    print("file exists")
     # want to exclude sites that are at frequency 1 *prior* to the bottleneck
     pop= unlist(lapply(strsplit(popModDate,"/"),"[",1))
     # any sites that are at frequency 1 prior to the bottleneck (at gen 0) should be excluded from load calcs. If they are at frequency 1 only after the bottleneck they can stay to be part of load. This will be if geneartion <= bneckGen (model specific) and if the numhom==popsizeDIP. can't just go by mutid because those can be duplicated across chunks. Must go by chunk AND mutID within a replicate. Then need to remove them at all other time points.... 

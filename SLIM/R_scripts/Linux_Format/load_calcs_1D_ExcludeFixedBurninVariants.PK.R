@@ -11,11 +11,11 @@ data.dir="/u/scratch/p/pkalhori/slim/concattedSummaries/"
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
 
 #popModDates=c("CA_AK/2D.3Epoch.Translocation.1perGen/20191023","CA_AK/2D.3Epoch.Translocation.5perGen/20191023","CA_AK/2D.3Epoch.Translocation.10perGen/20191023","CA_AK/2D.3Epoch.Translocation.25perGen/20191023")
-popModDates=c("CA/1D.3Epoch.LongerRecovery/20200227")
+popModDates=c("CA/1D.3Epoch.LongerRecovery/20200226")
 #popModDates=c("AK/1D.2Epoch.1.5Mb.cds/20190424/","AK/1D.2Epoch.1.5Mb.cds.LongerContract/20190607","genericPop/1D.2Epoch.1.5Mb.cds.20KAncSize/20190611") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 #reps=c(seq(1,23))
 
-reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
+reps=c(seq(1,2)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
 hset=c(0,0.5)
 
 allLoads=data.frame()
@@ -43,7 +43,9 @@ for (popModDate in popModDates){
         inputWithFixedRemoved <- input[!(input$chunk.mutID %in% fixedToRemove),]
         # see how this changes:
         length(unique(input$chunk.mutID)) - length(unique(inputWithFixedRemoved$chunk.mutID))==length(fixedToRemove)
-        # equation is, per site: 2hspq + sq^2 is the contribution to load; p = 1-qFreq
+        print("lengths")
+	print(length(unique(input$chunk.mutID)) - length(unique(inputWithFixedRemoved$chunk.mutID)))
+	# equation is, per site: 2hspq + sq^2 is the contribution to load; p = 1-qFreq
         # my "s" is negative, so I want to absolute value s --> |s|
         #### add to dataframe: #####
         # pull out population etc from popModDate
@@ -90,6 +92,6 @@ for (popModDate in popModDates){
   }
 }
 outdir="/u/scratch/p/pkalhori/slim/R_load_calc/CA"
-write.table(allLoads,paste(outdir,todaysdate,"LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
+#write.table(allLoads,paste(outdir,todaysdate,"LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
 
 
