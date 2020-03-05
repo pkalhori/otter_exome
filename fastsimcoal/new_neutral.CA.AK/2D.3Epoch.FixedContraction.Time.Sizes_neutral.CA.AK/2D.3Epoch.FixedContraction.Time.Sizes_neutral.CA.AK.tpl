@@ -1,8 +1,8 @@
 //Number of population samples (demes)
 2
 //Population effective sizes (number of genes)
-250
-200
+500
+400
 //Sample sizes
 14
 12

@@ -3,7 +3,7 @@
 [PARAMETERS]
 //#isInt? #name #dist.#min #max
 //all N are in number of haploid individuals
-1 TDIV unif 100 200000 output
+1 TDIV unif 100 400000 output
 1 NANC unif 100 50000 output
 1 NPOP0 unif 10 50000 output
 1 NPOP1 unif 10 50000 output

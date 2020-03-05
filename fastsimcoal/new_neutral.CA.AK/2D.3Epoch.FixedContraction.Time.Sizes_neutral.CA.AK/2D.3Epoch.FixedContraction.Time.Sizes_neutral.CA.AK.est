@@ -3,7 +3,7 @@
 [PARAMETERS]
 //#isInt? #name #dist.#min #max
 //all N are in number of haploid individuals
-1 TDIV unif 100 200000 output
+1 TDIV unif 100 400000 output
 1 NANC unif 100 50000 output
 1 NPOP0 unif 100 50000 output
 1 NPOP1 unif 100 50000 output
@@ -12,5 +12,5 @@
 
 [COMPLEX PARAMETERS]
 0 RESIZE_TOTAL = NANC/NPOP0 output
-0 RESIZE_0 = NPOP0/250 output
-0 RESIZE_1 = NPOP1/200 output
+0 RESIZE_0 = NPOP0/500 output
+0 RESIZE_1 = NPOP1/400 output
