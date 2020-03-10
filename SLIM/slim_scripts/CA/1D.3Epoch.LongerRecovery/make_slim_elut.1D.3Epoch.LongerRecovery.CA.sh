@@ -111,55 +111,8 @@ initialize() {
 
 //After burn in, calculate load every 2 generations
 ${t} late() {
+	//create fresh file
 	writeFile(paste(c(outdir,"/slim.output.",v_CHUNK,".summary.txt"),sep=""),"replicate,chunk,generation,mutid,type,s,age,originpop,subpop,numhet,numhom,popsizeDIP\n",append=F); // open fresh file
-		//file header
-	//mutation id
-	//mutation type
-	//selection coefficient
-	//age of mutation in generations
-	//subpopulation it arose in
-	//number of heterozygote derived in p1
-	//number of homozygote derived in p1
-	//number of heterozygote derived in p2
-	//number of homozygote derived in p2
-	//these are genotype counts not allele counts
-
-	
-	//for every mutation in the simulation
-	//pops=sim.subpopulations;
-	for (pop in sim.subpopulations){
-		for (mut in sim.mutations){
-			id = mut.id;
-			s = mut.selectionCoeff;
-			generation= sim.generation - 50000;
-			originpop = mut.subpopID;
-			age = sim.generation - mut.originGeneration;
-			type = mut.mutationType;
-			popsize = size(pop.individuals);
-			popID= pop.id;
-			//initialize genotype counts
-			pnumhet = 0;
-			pnumhom = 0;
-			
-			//count hom and het derived in p1
-			for (p1i in pop.individuals){
-				gt = sum(c(p1i.genomes[1].containsMutations(mut), p1i.genomes[0].containsMutations(mut)));
-				if (gt == 1){
-					pnumhet = pnumhet + 1;
-				} else if (gt == 2){
-					pnumhom = pnumhom + 1;
-				}
-			}
-					// string for mutation type. add m3, m4, etc. if you have multiple types
-			if (type == m1){
-				type = "m1";
-			} else if (type == m2){
-				type = "m2";
-			}
-			//print results
-		writeFile(paste(c(outdir,"/slim.output.",v_CHUNK,".summary.txt"),sep=""),paste(c(v_REP,v_CHUNK,generation,id,type,s,age,originpop,popID,pnumhet,pnumhom,popsize),sep=","),append=T);
-		}
-	}
 }
 ${t}: late() {
 	if (sim.generation % 2 == 0){
