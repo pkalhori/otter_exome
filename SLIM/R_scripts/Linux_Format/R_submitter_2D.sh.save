@@ -7,11 +7,11 @@
 #$ -M pkalhori
 
 
-pop=CA
+#pop=CA
 #model=1D.3Epoch.LongerRecovery
-wd=/u/scratch/p/pkalhori/slim/R_load_calc
-ld=$wd/$pop/$model
-mkdir -p $ld
+#wd=/u/scratch/p/pkalhori/slim/R_load_calc
+#ld=$wd/$pop/$model
+#mkdir -p $ld
 
 pathToScript=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/SLIM/R_scripts/Linux_Format
 myscript=load_calcs_2D_ExcludeFixedBurninVariants.R

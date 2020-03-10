@@ -3,7 +3,7 @@ wd=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/fastsimcoal
 models="2D.2Epoch 2D.2Epoch.Mig.Symmetric 2D.3Epoch.FixedContraction.Time.Sizes 2D.3Epoch.Mig.Symmetric.FixedContraction.Time.Sizes"
 pops=neutral.CA.AK
 #muts="4.6e-9"
-rundate=20200301
+rundate=20200305
 for model in $models
 do
 for pop in $pops
