@@ -3,18 +3,18 @@ todaysdate=format(Sys.Date(),format="%Y%m%d")
 
 
 data.dir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\"
-popModDate=c("CA_AK\\2D.3Epoch.Translocation\\20191103\\")
-popModDate2=c("CA_AK\\2D.3Epoch.Translocation\\20191023\\")
-popModDate3=c("CA_AK\\2D.3Epoch.Translocation\\20191113\\")
+popModDate=c("CA_AK\\2D.3Epoch.Translocation\\20200226\\")
+#popModDate2=c("CA_AK\\2D.3Epoch.Translocation\\20191023\\")
+#popModDate3=c("CA_AK\\2D.3Epoch.Translocation\\20191113\\")
 
 ##mig burst
-allLoads1<- read.table(paste(data.dir,popModDate,"25for2Gen.txt",sep = ""), header = T)
+allLoads<- read.table(paste(data.dir,popModDate,"CA_AK_20200303LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
 #cntinual mig
-allLoads2<- read.table(paste(data.dir,popModDate2,"migs_data.txt",sep = ""), header = T) 
+#allLoads2<- read.table(paste(data.dir,popModDate2,"migs_data.txt",sep = ""), header = T) 
 
 ##no mig
-allLoads3 <- read.table(paste(data.dir,popModDate3,"nomig_data.txt",sep = ""), header = T) 
+#allLoads3 <- read.table(paste(data.dir,popModDate3,"nomig_data.txt",sep = ""), header = T) 
 
 allLoads<- rbind.data.frame(allLoads1,allLoads2,allLoads3)
 ?write.csv
@@ -23,7 +23,7 @@ getwd()
 # label H:
 
 allLoads$hLabel <- paste("h = ",allLoads$h)
-allLoads <- allLoads[allLoads$generation>=8000,]
+allLoads <- allLoads[allLoads$generation>=4000,]
 allLoads$subpopulation[allLoads$subpopulation==1] <- "AK"
 allLoads$subpopulation[allLoads$subpopulation==2] <- "CA"
 
@@ -35,8 +35,8 @@ allLoads[allLoads$model=="2D.3Epoch.Translocation.25perGen",]$migLabel <- "25 in
 allLoads[allLoads$model=="2D.3Epoch.Translocation.25for2Gen",]$migLabel <- "25 ind for 2 gen"
 allLoads[allLoads$model=="2D.3Epoch.NoTranslocation",]$migLabel <- "No Migrants"
 
-AK <- c(8002,8038,8056)
-CA <- c(8012,8038,8056)
+AK <- c(4002,8038,8056)
+CA <- c(4002,8038,8056)
 library(reshape2)
 dates <- melt(rbind(AK,CA))
 library(tidyverse)
@@ -46,7 +46,7 @@ library(tidyverse)
 
 dates_df <- data.frame(
   subpopulation = c("AK","CA"),
-  dates = c(8002,8038,8056,8012,8038,8056)
+  dates = c(4002,4038,4056,4002,4038,4056)
 )
 allLoads_means_se <- allLoads %>% 
   group_by(generation,hLabel,subpopulation,migLabel) %>% # Group the data by manufacturer
@@ -68,8 +68,8 @@ allLoads_means_se$migLabel <- factor(allLoads_means_se$migLabel,levels=c("No Mig
 
 
 p2 <- 
-  ggplot(allLoads_means_se,aes(x=generation,y=mean_load))+
-  geom_line(position=position_dodge(.5),size = 1,alpha=0.5,color="blue")+
+  ggplot(allLoads_means_se,aes(x=generation,y=mean_load),color=migLabel)+
+  geom_line(position=position_dodge(.5),size = 1,alpha=0.5)+
   #stat_summary(fun.y = "mean", geom = "point", size = 1, color=model)+
   #stat_summary(fun.y = "mean", geom = "line", size = 0.5)+
   theme_bw()+
