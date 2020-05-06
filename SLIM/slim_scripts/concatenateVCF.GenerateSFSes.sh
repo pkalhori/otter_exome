@@ -9,7 +9,7 @@
 numReps=25 # total number of reps you ran 
 DesiredReps=20 # how many you'll take out of the 25 (some randomly fail, so picking 20 / 25 for all)
 numChunks=20 #
-numStates=53 #
+numStates=1 #
 checkNumber=$((numChunks*numStates))
 
 # process output of slim 
@@ -17,9 +17,9 @@ gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_ex
 # choose the specific combination of populations/models/rundates you want? this is awkward... what is best way to do it?
 # com is 3epoch (differnt model) 
 
-rundate=20191201_scratch # set of simulations you're interested in (if is across different rundates you can list popsModelsRundates explicitly)
-hs="0 0.5" # set of hs you're interested in
-popMods="AK/1D.3Epoch.LongerBurnIn" # population and corresponding models you're interested in
+rundate=20200310 # set of simulations you're interested in (if is across different rundates you can list popsModelsRundates explicitly)
+hs="0.5 0" # set of hs you're interested in
+popMods="CA/1D.3Epoch.LongerRecovery" # population and corresponding models you're interested in
 
 # you can have multiple models per population just list as: AK/1D.2Epoch.1.5Mb.cds AK/OtherModel in the popMods variable
 popsModelsRundates=""
@@ -72,20 +72,20 @@ mkdir -p $vcfOutDir
 mkdir -p $sfsDir
 
 states="PreContraction PostContraction PostRecovery EndSimulation"
-for k in $(seq 50002 2 50034)
-do
-states="$states Contraction.${k}gen"
-done
+#for k in $(seq 50002 2 50034)
+#do
+#states="$states Contraction.${k}gen"
+#done
 
-for l in $(seq 50038 2 50052)
-do
-states="$states Recovery.${l}gen"
-done
+#for l in $(seq 50038 2 50052)
+#do
+#states="$states Recovery.${l}gen"
+#done
 
-for m in $(seq 50056 2 50104)
-do
-states="$states Future.${m}gen"
-done
+#for m in $(seq 50056 2 50104)
+#do
+#states="$states Future.${m}gen"
+#done
 
 ##states="PreContraction PostContraction PostRecovery SpillRecovery.${j}gen PostSpill"
 
@@ -99,7 +99,7 @@ do
 echo "$i ${state}"
 repdir=$SCRATCH/slim/$popsModelsRundate/${i}
 
-outSummary=$summaryOutDir/${i}.slim.output.${state}.allConcatted.summary.txt
+#outSummary=$summaryOutDir/${i}.slim.output.${state}.allConcatted.summary.txt
 
 # vcf with all mutations together:
 outVCF=$vcfOutDir/${i}.slim.output.${state}.allConcatted.vcf
