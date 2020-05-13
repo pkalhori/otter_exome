@@ -3,18 +3,18 @@ todaysdate=format(Sys.Date(),format="%Y%m%d")
 
 
 data.dir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\"
-popModDate=c("AK\\1D.5Epoch\\20191203\\")
 popModDate2=c("CA\\1D.3Epoch.LongerRecovery\\20191012\\")
+popModDate=c("CA\\1D.3Epoch.LongerRecovery\\20200310\\")
 
 ##AK
-allLoads_AK<- read.table(paste(data.dir,popModDate,"AK_data.txt",sep = ""), header = T)
+allLoads_old<- read.table(paste(data.dir,popModDate2,"CA_data.txt",sep = ""), header = T)
 
 #CA
-allLoads_CA<- read.table(paste(data.dir,popModDate2,"CA_data.txt",sep = ""), header = T)
+allLoads_CA<- read.table(paste(data.dir,popModDate,"20200311_CA_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
 
 
-allLoads<- rbind.data.frame(allLoads_AK)
+allLoads<- rbind.data.frame(allLoads_CA)
 
 
 # label H:
@@ -24,7 +24,7 @@ allLoads$hLabel[allLoads$h==0.5] <- paste("Additive")
 
 
 AK <- c(36)
-CA <- c(26)
+CA <- c(36)
 library(reshape2)
 dates <- melt(rbind(AK,CA))
 library(tidyverse)
@@ -34,10 +34,19 @@ library(tidyverse)
 
 dates_df <- data.frame(
   population = c("AK","CA"),
-  years = c(36,26)
+  years = c(36,36)
 )
 allLoads_means_se <- allLoads %>% 
   group_by(generation,hLabel,population) %>% # Group the data by manufacturer
+  summarize(mean_load=mean(L), # Create variable with mean of cty per group
+            sd_load=sd(L), # Create variable with sd of cty per group
+            N_load=n(), # Create new variable N of cty per group
+            se=sd_load/sqrt(N_load), # Create variable with se of cty per group
+            upper_limit=mean_load+sd_load, # Upper limit
+            lower_limit=mean_load-sd_load # Lower limit
+  ) 
+allLoads_means_se_old <- allLoads_old %>% 
+  group_by(generation,h,population) %>% # Group the data by manufacturer
   summarize(mean_load=mean(L_mutationLoad), # Create variable with mean of cty per group
             sd_load=sd(L_mutationLoad), # Create variable with sd of cty per group
             N_load=n(), # Create new variable N of cty per group
@@ -50,7 +59,33 @@ allLoads_means_se <- allLoads %>%
 allLoads_means_se<- as.data.frame(allLoads_means_se)
 class(allLoads_means_se)
 
+##Recessive
 
+Pre_Contraction <-allLoads_means_se$mean_load[allLoads_means_se$generation==0 & allLoads_means_se$hLabel=="Recessive"]
+Post_Contraction <- allLoads_means_se$mean_load[allLoads_means_se$generation==36 & allLoads_means_se$hLabel=="Recessive"]
+(Post_Contraction-Pre_Contraction)/Pre_Contraction
+
+
+##Additive
+Pre_Contraction <-allLoads_means_se$mean_load[allLoads_means_se$generation==0 & allLoads_means_se$hLabel=="Additive"]
+Post_Contraction <- allLoads_means_se$mean_load[allLoads_means_se$generation==36 & allLoads_means_se$hLabel=="Additive"]
+(Post_Contraction-Pre_Contraction)/Pre_Contraction
+
+####not removing fixed burn in load
+##Recessive
+
+Pre_Contraction <-allLoads_means_se$mean_load[allLoads_means_se$generation==0 & allLoads_means_se$hLabel=="Recessive"]
+Post_Contraction <- allLoads_means_se$mean_load[allLoads_means_se$generation==36 & allLoads_means_se$hLabel=="Recessive"]
+(Post_Contraction-Pre_Contraction)/Pre_Contraction
+
+
+##Additive
+Pre_Contraction <-allLoads_means_se_old$mean_load[allLoads_means_se_old$generation==0 & allLoads_means_se_old$h==0]
+Post_Contraction <- allLoads_means_se_old$mean_load[allLoads_means_se_old$generation==26 & allLoads_means_se_old$h==0]
+max(allLoads_means_se_old$mean_load[allLoads_means_se_old$h==0])
+(Post_Contraction-Pre_Contraction)/Pre_Contraction
+
+Pre_Contraction/Post_Contraction
 
 
 
@@ -69,9 +104,9 @@ p2 <-
   
   #stat_summary(fun.data = allLoads_means_se, geom = "errorbar")+
   geom_errorbar(data=allLoads_means_se, mapping=aes(ymin=lower_limit,ymax=upper_limit),color="green",size=0.1)+
-  geom_vline(xintercept=36)+
-  geom_vline(xintercept=50)+
-  geom_vline(xintercept=56)
+  geom_vline(xintercept=36)
+  #geom_vline(xintercept=50)+
+  #geom_vline(xintercept=56)
 
 #theme(legend.title=element_blank())
 
