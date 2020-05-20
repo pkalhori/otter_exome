@@ -15,7 +15,7 @@ numStates=$5 #
 checkNumber=$((numChunks*numStates))
 
 
-wd=/u/scratch/p/pkalhori/slim/$popModel/
+wd=/u/scratch/p/pkalhori/Paper_Data/SLIM/raw_data/$popModel/
 
 > $wd/passingReps.summaries.txt
 > $wd/failingReps.summaries.txt

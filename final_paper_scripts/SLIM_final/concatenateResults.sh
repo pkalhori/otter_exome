@@ -13,7 +13,7 @@ numStates=1 #
 checkNumber=$((numChunks*numStates))
 
 # process output of slim 
-gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/SLIM
+gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/final_paper_scripts
 # choose the specific combination of populations/models/rundates you want? this is awkward... what is best way to do it?
 # com is 3epoch (differnt model) 
 
@@ -37,8 +37,8 @@ done # this sets up your list of pops, models, rundates and Hs in a list that lo
 # popsModelsRundates='AK/1D.2Epoch.1.5Mb.cds/20190423/h_0.5/ AL/1D.2Epoch.1.5Mb.cds/20190423/h_0.5/ CA/1D.2Epoch.1.5Mb.cds/20190423/h_0.5/ KUR/1D.2Epoch.1.5Mb.cds/20190423/h_0.5/' # maybe? -- this is kind of awkward, maybe have to deal with diff populations differently?
 # not ready yet: COM/1D.3Epoch.1.5Mb.cds/20190423/h_0.5/
 # loop through models, populations and 25 replicates
-scriptdir=$gitdir/slim_scripts/
-wd=$SCRATCH/slim/ 
+scriptdir=$gitdir/SLIM_final
+wd=$SCRATCH/Paper_Data/SLIM/raw_data/ 
 
 ################### first get lists of which runs worked #################
 
@@ -70,7 +70,7 @@ mkdir -p $summaryOutDir
 cat $wd/$popsModelsRundate/$passingFile | while read i # instead of a for loop, going to read through my passing file. i is replicate_x not just a number 
 do 
 echo "$i ${state}"
-repdir=$SCRATCH/slim/$popsModelsRundate/${i}
+repdir=$SCRATCH/Paper_Data/SLIM/raw_data/$popsModelsRundate/${i}
 
 outSummary=$summaryOutDir/${i}.slim.output.allConcatted.summary.txt
 

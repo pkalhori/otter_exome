@@ -38,7 +38,7 @@ done # this sets up your list of pops, models, rundates and Hs in a list that lo
 # not ready yet: COM/1D.3Epoch.1.5Mb.cds/20190423/h_0.5/
 # loop through models, populations and 25 replicates
 scriptdir=$gitdir/slim_scripts
-wd=$SCRATCH/slim/ 
+wd=$SCRATCH/Paper_data/SLIM 
 
 ################### first get lists of which runs worked #################
 
