@@ -1,4 +1,4 @@
-For the single population models
+For the single population models, all populations use the same template files. Only sample size varies between populations, and sample sizes are pulled from the file projectionValues.txt.
 
 1D.1Epoch refers to a single epoch model, where a constant net population size is inferred
 
