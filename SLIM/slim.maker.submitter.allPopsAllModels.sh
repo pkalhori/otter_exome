@@ -1,9 +1,9 @@
 #gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/SLIM
 gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/SLIM
 #models='2D.3Epoch.NoTranslocation 2D.3Epoch.Translocation.1perGen 2D.3Epoch.Translocation.5perGen 2D.3Epoch.Translocation.10perGen 2D.3Epoch.Translocation.25perGen 2D.3Epoch.Translocation.25for2Gen'
-models=1D.5Epoch
+models=1D.3Epoch
 #populations='AK AL CA COM KUR'
-populations=AK # do COM separately below
+populations=CA # do COM separately below
 # loop through models, populations and 25 replicates
 scriptdir=$gitdir/slim_scripts
 
@@ -19,15 +19,15 @@ mkdir -p $wd
 logdir=$wd/logs
 mkdir -p $logdir
 # make the slim script:
-for h in 0 0.5
+for h in 0.5
 do
-sh $scriptdir/$pop/$model/make_slim_elut.${model}.${pop}.sh $h
+sh $scriptdir/$pop/$model/make_slim_elut_hs.${model}.${pop}.sh $h
 #done
 
-for i in {1..25}
+for i in {1..2}
 do
 # qsub -N name -o outdir -e errordir $script $pop $model $rep $rundate
-qsub -N slimRep${i}.${pop}.${model}.${h} -o $logdir -e $logdir $scriptdir/array_slim_elut.generic.sh $pop $model $i $todaysdate $h
+qsub -N slimRep${i}.${pop}.${model}.hs -o $logdir -e $logdir $scriptdir/array_slim_elut.generic.sh $pop $model $i $todaysdate $h
 done
 done
 done

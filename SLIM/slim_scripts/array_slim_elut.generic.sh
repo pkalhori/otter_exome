@@ -3,7 +3,7 @@
 #$ -l h_rt=24:00:00,h_data=6G
 #$ -m abe
 #$ -M pkalhori
-#$ -t 1-20
+#$ -t 1-2
 # eventually do 1-20 (1.5Mb * 20 = 30Mb, ~ an exome)
 # note: this array can be used for any slim model
 # going to simulate 1.5MB X 14 (=21MB)
@@ -44,11 +44,11 @@ seed=$(($todaysdate+$RANDOM+(($RANDOM*$rep*10))+$SGE_TASK_ID)) # uses date, plus
 
 #for h in 0 0.5
 #do
-wd=$SCRATCH/slim/$pop/$model/$rundate/h_$h
+wd=$SCRATCH/slim/$pop/$model/$rundate/h_s
 outdir=$wd/replicate_${rep} # set this in submission script 
 mkdir -p $wd
 mkdir -p $outdir
-slimscript=slim_elut_${model}_${pop}_h${h}.job # specific slim script 
+slimscript=slim_elut_${model}_${pop}_hs.job # specific slim script 
 cp $scriptdir/$slimscript $wd/$slimscript.AsRunOn.$todaysdate # make a record of the script as it was run; this is inefficient, copies it for each task in the array
 ######## parameters #############
 $slim \
