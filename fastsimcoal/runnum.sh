@@ -1,15 +1,14 @@
 #wd=/u/scratch/p/pkalhori/fastsimcoal/bird_data
-wd=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/fastsimcoal
-models="2D.2Epoch 2D.2Epoch.Mig.Symmetric 2D.3Epoch.FixedContraction.Time.Sizes 2D.3Epoch.Mig.Symmetric.FixedContraction.Time.Sizes"
-pops=neutral.CA.AK
+#wd=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/fastsimcoal
+wd=/u/scratch/p/pkalhori/fastsimcoal/slim_simulated_inference
+models="1D.1Epoch_CA 1D.2Epoch_CA 1D.3Epoch_CA"
+for rep in {1..10}
+do
+pop=CA.simulation.rep.${rep}.CA.1D.2Epoch.35Gen.200Inds
 #muts="4.6e-9"
-rundate=20200305
+rundate=20200708
 for model in $models
 do
-for pop in $pops
-do
-#for mut in $muts
-#do
 outfile=$wd/${model}_${pop}_${rundate}.all.output.concatted.txt
 #get header:
 header=`head -n1 $wd/${model}_${pop}_${rundate}/run_1/${model}_${pop}/*bestlhoods`
@@ -19,7 +18,6 @@ do
 outdir=$wd/${model}_${pop}_${rundate}/run_${i}/${model}_${pop}
 results=`grep -v [A-Z] $outdir/*.bestlhoods`
 echo -e "${i}\t$results" >> $outfile
-#done
 done
 done
 done
