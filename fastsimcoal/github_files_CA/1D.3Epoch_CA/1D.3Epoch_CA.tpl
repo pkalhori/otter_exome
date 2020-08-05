@@ -3,7 +3,7 @@
 //Population effective sizes (number of genes)
 NCUR
 //Sample sizes
-SAMPLE_SIZE
+12
 //Growth rates : negative growth implies population expansion
 0
 //Number of migration matrices : 0 implies no migration between demes

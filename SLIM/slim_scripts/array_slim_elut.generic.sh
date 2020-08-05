@@ -3,7 +3,7 @@
 #$ -l h_rt=24:00:00,h_data=6G
 #$ -m abe
 #$ -M pkalhori
-#$ -t 1-2
+#$ -t 1-20
 # eventually do 1-20 (1.5Mb * 20 = 30Mb, ~ an exome)
 # note: this array can be used for any slim model
 # going to simulate 1.5MB X 14 (=21MB)
