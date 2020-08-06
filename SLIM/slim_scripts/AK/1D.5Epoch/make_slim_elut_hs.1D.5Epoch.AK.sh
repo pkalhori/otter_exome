@@ -1,3 +1,51 @@
+# Script to make SLIM job script
+# USAGE: ./make_slim_wolf_101517.job.sh [h]
+pop=AK
+model=1D.5Epoch
+#model=1D.2Epoch.1.5Mb.cds.LongerContract
+gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/SLIM
+scriptdir=$gitdir/slim_scripts/$pop/$model
+mkdir -p $scriptdir # set script dir
+todaysdate=`date +%Y%m%d`
+########## population specific parameters ########
+# set sample size for vcf (should match empirical for AK)
+# can set manually or pull from a table
+ss=7 # in diploids # will depend on population, note you can find these in projectionValues.txt file
+#population	ProjectionValueHaploids Diploids
+#KUR	12	6
+#CA	12	6
+#COM	34	17
+#AK	14	7
+#AL	20	10
+# variables:
+nanc=4500 # a ball park Nanc for AK
+nu=250 # contraction size  -- a medium contraction size
+tcontract=35 # contraction duration before you sample -- a longer contraction time than dadi ifnerence (more like FSC)
+trecovery=13 #1911-1989 is around 13 generations (6y/gen) 
+nrec=2500 #not sure what population size to use; best I could find for WPWS
+tspill=5 ##want to model a very short populatoin crash
+nspill=250 #around 90% of otters in the area were killed
+ntoday=2500 #assuming complete recovery 
+
+# this nu / T combo is within the MLE estimate for Alaska from my grid search. also want to try the California version (100 for 30 gens with smaller Nanc of ~3500)
+######### general parameters ; can set here or in command line ##########
+# Set g, number of genes (exons)
+g=1000
+# Set gLen, the length of exons
+gLen=1500
+# Set t, number of burn-in generations
+t=50000
+# set mutation rate
+mu=8.64e-9 # mutation rate
+# Set h, dominance coefficient
+h=$1  # loop through hs
+# Set j, the chunk number (for 14 chunks?)
+
+# Make script
+# chunk gets set when you run slim (based on SGE task id) # or something?? how to do this part? I don't really want to make a separte slim script each time? have it be a -d thing maybe?
+# have to figure out the chunks/replicates situation.
+
+cat > $scriptdir/slim_elut_${model}_${pop}_hs.job << EOM
 
 // changes to make: apparently 1e-03 is reasonable between-gene recomb rate
 // and then want to make separate chromosomes with 0.5 between them (or just simulate them separately)
@@ -5,20 +53,20 @@
 // recomb w/in each gene will be 1e-08, between genes will be 1e-3
 // will either do 14x1.5mb so they are independent, or will simulate them all together if want to think about overall genetic load (then would have to set up chromosomes within the simulation)
 initialize() {
-	defineConstant("g",1000); //number of genes; starting with 1000 (AB)
-	defineConstant("geneLength", 1500); // length of each gene
+	defineConstant("g",$g); //number of genes; starting with 1000 (AB)
+	defineConstant("geneLength", $gLen); // length of each gene
 	defineConstant("seqLength", g*geneLength); // total sequence length starting with 1.5Mb (AB)
-	//defineConstant("outdir",\"\"); -- set in command line
-	//defineConstant("v_CHUNK",); // portion of genome  -- set in command line
-	//defineConstant("v_REP",); // overall replicate number -- set in command line
-	defineConstant("v_h",0.5); // dominance coefficient
-	defineConstant("v_SS",7); // sample size
-	defineConstant("v_MU",8.64e-9);
-	defineConstant("v_NANC",4500); // ancestral size
-	defineConstant("v_NU",250); // contraction size
-	defineConstant("v_NREC",2500); // contraction size
-	defineConstant("v_NSPILL",250); // size after spill
-	defineConstant("v_NTODAY",2500); // today's population 
+	//defineConstant("outdir",\"$outdir\"); -- set in command line
+	//defineConstant("v_CHUNK",$chunk); // portion of genome  -- set in command line
+	//defineConstant("v_REP",$rep); // overall replicate number -- set in command line
+	defineConstant("v_h",$h); // dominance coefficient
+	defineConstant("v_SS",$ss); // sample size
+	defineConstant("v_MU",$mu);
+	defineConstant("v_NANC",$nanc); // ancestral size
+	defineConstant("v_NU",$nu); // contraction size
+	defineConstant("v_NREC",$nrec); // contraction size
+	defineConstant("v_NSPILL",$nspill); // size after spill
+	defineConstant("v_NTODAY",$ntoday); // today's population 
 	
 	//cat("Exome portion length:"+seqLength+"\n");
 	initializeMutationRate(v_MU);
@@ -70,16 +118,16 @@ if (homozygous) {
 
 // output generation number so I can track progress
 
-1:50000 late() {
+1:${t} late() {
 	if (sim.generation % 1000 == 0){
 		cat(sim.generation+"\n");
 	}
 }
 //After burn in, calculate load every 2 generations
-50000 late() {
+${t} late() {
 	writeFile(paste(c(outdir,"/slim.output.",v_CHUNK,".summary.txt"),sep=""),"replicate,chunk,generation,mutid,type,s,age,originpop,subpop,numhet,numhom,popsizeDIP\n",append=F); // open fresh file
 }
-50000: late() {
+${t}: late() {
 	if (sim.generation % 2 == 0){
 	//file header
 	//mutation id
@@ -134,47 +182,48 @@ if (homozygous) {
 
 // after t generation burn in, sample individuals and output counts across whole population as well (from JAR script) ;
 // then do this again after the contraction -- then only need to simulate once instead of doing 1 and 2 epoch separately. 
-50000 late() {
+${t} late() {
 	p1.outputVCFSample(v_SS, F,filePath=paste(c(outdir,"/slim.output.PreContraction.",v_CHUNK,".vcf"),sep=""));
 
 }
 
 // contract the population 1 gen after burn in:
-50001 {
+$((${t} + 1)) {
 	p1.setSubpopulationSize(v_NU);
 	}
 // Then keep it contracted for an additional +tContract
-50036 late() {
+$((${t} + 1+ ${tcontract})) late() {
 	p1.outputVCFSample(v_SS, F,filePath=paste(c(outdir,"/slim.output.PostContraction.",v_CHUNK,".vcf"),sep=""));
 
 }
 // expand the population 1 generation after sampling:
-50037 {
+$((${t} + 2 + ${tcontract})) {
 	p1.setSubpopulationSize(v_NREC);
 	}
 // Proceed for trecovery until the present day, then sample
-50050 late() {
+$((${t} + 2+ ${tcontract}+${trecovery})) late() {
 	p1.outputVCFSample(v_SS, F,filePath=paste(c(outdir,"/slim.output.PostRecovery.",v_CHUNK,".vcf"),sep=""));
 
 }
 // contract the population again generation after sampling:
-50051 {
+$((${t} + 3+ ${tcontract}+${trecovery})) {
 	p1.setSubpopulationSize(v_NSPILL);
 	}
 // Proceed for trecovery until the present day, then sample
-50056 late() {
+$((${t} + 3+ ${tcontract}+${trecovery}+${tspill})) late() {
 	p1.outputVCFSample(v_SS, F,filePath=paste(c(outdir,"/slim.output.PostSpill.",v_CHUNK,".vcf"),sep=""));
 
 }
 // recover the populatoin to original size:
-50057 {
+$((${t} + 4+ ${tcontract}+${trecovery}+${tspill})) {
 	p1.setSubpopulationSize(v_NTODAY);
 	}
 // sample every generation
 
-50057:50107 late() {
+$((${t} + 4 + ${tcontract} + ${trecovery} + ${tspill})):$((${t} + 54 + ${tcontract} + ${trecovery} + ${tspill})) late() {
 	p1.outputVCFSample(v_SS, F,filePath=paste(c(outdir,"/slim.output.SpillRecovery.",sim.generation,"gen.",v_CHUNK,".vcf"),sep=""));
 
 }
-50108 late() { sim.outputFull(); } 
+$((${t} + 55+ ${tcontract}+${trecovery}+${tspill})) late() { sim.outputFull(); } 
 
+EOM
