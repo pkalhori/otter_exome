@@ -1,6 +1,6 @@
 #! /bin/bash
 #$ -cwd
-#$ -l h_rt=24:00:00,h_data=6G
+#$ -l h_rt=24:00:00,h_data=10G
 #$ -m abe
 #$ -M pkalhori
 #$ -t 1-20
