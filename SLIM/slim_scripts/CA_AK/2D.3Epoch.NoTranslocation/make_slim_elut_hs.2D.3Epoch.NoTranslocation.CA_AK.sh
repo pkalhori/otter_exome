@@ -126,6 +126,7 @@ if (homozygous) {
 } else {
 	return (1.0 + mut.selectionCoeff * h);
 }
+}
 
 
 // create a population of variable v_NANC individuals
