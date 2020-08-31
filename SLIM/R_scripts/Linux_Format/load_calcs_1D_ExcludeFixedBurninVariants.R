@@ -7,14 +7,14 @@ library(dplyr)
 todaysdate=format(Sys.Date(),format="%Y%m%d")
 
 data.dir="/u/scratch/p/pkalhori/slim/concattedSummaries/"
-outdir="/u/scratch/p/pkalhori/slim/R_load_calc/CA/"
+outdir="/u/scratch/p/pkalhori/slim/R_load_calc/AK/"
 #plot.dir="/Users/annabelbeichman/Documents/UCLA/Otters/OtterExomeProject/results/analysisResults/slim/poonehSimulations/loadCalcs/"
 #dir.create(plot.dir)
 #pops=c("AK","AL","genericPop.LongerContract")
 #models=c("1D.2Epoch.1.5Mb.cds")
 #simdates=c(20190424,20190607)
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
-popModDates=c("CA/1D.3Epoch.LongerRecovery/20200804") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
+popModDates=c("AK/1D.5Epoch/20200813") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 #reps=c(seq(1,23))
 reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
 hset=c("s")

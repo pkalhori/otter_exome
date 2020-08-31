@@ -24,7 +24,7 @@ do
 sh $scriptdir/$pop/$model/make_slim_elut_hs.${model}.${pop}.sh $h
 #done
 
-for i in {1..5}
+for i in {6..25}
 do
 # qsub -N name -o outdir -e errordir $script $pop $model $rep $rundate
 qsub -N slimRep${i}.${pop}.${model}.hs -o $logdir -e $logdir $scriptdir/array_slim_elut.generic.sh $pop $model $i $todaysdate $h
