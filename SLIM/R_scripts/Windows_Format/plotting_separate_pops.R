@@ -4,17 +4,16 @@ todaysdate=format(Sys.Date(),format="%Y%m%d")
 
 data.dir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\"
 popModDate2=c("CA\\1D.3Epoch.LongerRecovery\\20191012\\")
-popModDate=c("CA\\1D.3Epoch.LongerRecovery\\20200310\\")
+popModDate=c("AK\\1D.5Epoch\\20200814\\")
 
 ##AK
 allLoads_old<- read.table(paste(data.dir,popModDate2,"CA_data.txt",sep = ""), header = T)
 
-#CA
-allLoads_CA<- read.table(paste(data.dir,popModDate,"20200311_CA_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+allLoads<- read.table(paste(data.dir,popModDate,"20200814LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
 
 
-allLoads<- rbind.data.frame(allLoads_CA)
+allLoads<- rbind.data.frame(allLoads_AK)
 
 
 # label H:
@@ -29,7 +28,8 @@ library(reshape2)
 dates <- melt(rbind(AK,CA))
 library(tidyverse)
 dates <- dates %>% group_by(Var1)
-
+install.packages("tidyselect")
+install.packages("tidyverse")
 library(tidyverse)
 
 dates_df <- data.frame(
@@ -37,7 +37,7 @@ dates_df <- data.frame(
   years = c(36,36)
 )
 allLoads_means_se <- allLoads %>% 
-  group_by(generation,hLabel,population) %>% # Group the data by manufacturer
+  group_by(generation) %>% # Group the data by manufacturer
   summarize(mean_load=mean(L), # Create variable with mean of cty per group
             sd_load=sd(L), # Create variable with sd of cty per group
             N_load=n(), # Create new variable N of cty per group
@@ -99,8 +99,8 @@ p2 <-
   ylab("Genetic Load")+
   xlab("Generation") +
   theme(legend.position = "left")+
-  ggtitle("Genetic Load for 5 Epoch Model")+
-  facet_grid(hLabel~population,scales="free")+
+  ggtitle("Genetic Load for AK 5Epoch")+
+  #facet_grid(hLabel~population,scales="free")+
   
   #stat_summary(fun.data = allLoads_means_se, geom = "errorbar")+
   geom_errorbar(data=allLoads_means_se, mapping=aes(ymin=lower_limit,ymax=upper_limit),color="green",size=0.1)+
@@ -108,17 +108,19 @@ p2 <-
   #geom_vline(xintercept=50)+
   #geom_vline(xintercept=56)
 
+plot.dir<-"C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\AK\\1D.5Epoch\\20200814\\"
+ggsave(paste(plot.dir,"5Epoch_AK_hs_",todaysdate,".pdf",sep=""),p2,height=6,width=8)
 #theme(legend.title=element_blank())
 
-
+head(allLoads)
 p3 <- 
-  ggplot(allLoads,aes(x=generation,y=L_mutationLoad))+
+  ggplot(allLoads,aes(x=generation,y=L))+
   #geom_line(position=position_dodge(.5),size = .1,alpha=0.5)+
   #stat_summary(fun.y = "mean", geom = "point", size = 1, color=model)+
-  stat_summary(fun.y = "mean", geom = "line", size = 0.5)+
+  stat_summary(fun = "mean", geom = "line", size = 0.5)+
   theme_bw()+
-  geom_vline(data=dates, aes(xintercept=value))+
-  facet_grid(hLabel~interaction(allLoads$subpopulation),scales="free")+
+  #geom_vline(data=dates, aes(xintercept=value))+
+  #facet_grid(hLabel~interaction(allLoads$subpopulation),scales="free")+
   ylab("Genetic Load")+
   xlab("Generation") +
   theme(legend.position = "left")+

@@ -20,18 +20,21 @@ infile=paste(data.dir,popModDate,"\\h_s","\\replicate_1",".slim.output.allConcat
 input = read.table(infile,sep=",",header=T)
 input$h <- NA
 input$h <- (0.5)/(1 - 7071.07*(input$s))
-input_filtered <- input[input$generation==100 & input$s!=0,]
+input_filtered_neutral_removed <- input[input$s!=0,]
+
 
 length(input$s==0)
 length(input$s)
 input$s
 
-
-hs <- ggplot(input_filtered,aes(x=s, y=h))+
+library(rgl)
+hs <- ggplot(input_filtered_neutral_removed,aes(x=s, y=h))+
+  geom_point()
+hs_full <- ggplot(input,aes(x=s, y=h))+
   geom_point()
 plot(x=input$s, y=input$h)
 
-reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
+reps=c(seq(1,2)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
 hset=c("s")
 #states=c("PreContraction","PostContraction")
 allAvgdInputs=data.frame()
@@ -123,7 +126,7 @@ allLoads_means_se <- allLoads %>%
             upper_limit=mean_load+sd_load, # Upper limit
             lower_limit=mean_load-sd_load # Lower limit
   ) 
-
+sum(input$h <= 0.001)
 p3 <- 
   ggplot(allLoads,aes(x=generation,y=L))+
   #geom_line(position=position_dodge(.5),size = .1,alpha=0.5)+

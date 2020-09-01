@@ -14,7 +14,9 @@ outdir="/u/scratch/p/pkalhori/slim/R_load_calc/AK/"
 #models=c("1D.2Epoch.1.5Mb.cds")
 #simdates=c(20190424,20190607)
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
-popModDates=c("AK/1D.5Epoch/20200813") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
+#popModDates=c("AK/1D.5Epoch/20200813") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
+
+popModDates=c("CA_AK/2D.3Epoch.NoTranslocation/20200816/", "CA_AK/2D.3Epoch.Translocation.1perGen/20200816/","CA_AK/2D.3Epoch.Translocation.5perGen/20200816/","CA_AK/2D.3Epoch.Translocation.10perGen/20200816/","CA_AK/2D.3Epoch.Translocation.25perGen/20200816/", "CA_AK/2D.3Epoch.Translocation.25for2Gen/20200816/")
 #reps=c(seq(1,23))
 reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
 hset=c("s")
@@ -71,14 +73,14 @@ for(popModDate in popModDates){
       # want to get total S per generation:
       # want to get totals and avgs across all chunks per generation
       avgHomPerIndPersCat <- inputWithFixedRemoved %>%
-        group_by(generation,population,sCat,model,replicate,popModDate,popsizeDIP) %>%
+        group_by(generation,population,subpop,sCat,model,replicate,popModDate,popsizeDIP) %>%
         summarise(totalNumHom=sum(numhom),totalHet=sum(numhet)) %>%
         mutate(avgHomPerInd=totalNumHom/popsizeDIP) %>%
         mutate(avgHetPerInd=totalHet/popsizeDIP) %>%
         mutate(avgDerivedAllelesPerInd=((2*totalNumHom)+totalHet)/(2*popsizeDIP))
       # don't group by sCat for load calcs:
       LoadPerGeneration <- inputWithFixedRemoved %>%
-        group_by(generation,population,model,replicate,popModDate,popsizeDIP) %>%
+        group_by(generation,subpop,population,model,replicate,popModDate,popsizeDIP) %>%
         summarise(totalS=sum(loadComponent))
       LoadPerGeneration$W <- exp(-LoadPerGeneration$totalS)
       LoadPerGeneration$L  = 1 - LoadPerGeneration$W # mutation load 

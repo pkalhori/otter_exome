@@ -113,12 +113,12 @@ plot(allLoads$L[y= allLoads$subpop==1 & allLoads$migLabel=="No Migrants"& allLoa
 
 p3 <- 
   ggplot(allLoads,aes(x=generation,y=L))+
-  #geom_line(position=position_dodge(.5),size = .1,alpha=0.5)+
+  geom_line(position=position_dodge(.5),size = .1,alpha=0.5)+
   #stat_summary(fun.y = "mean", geom = "point", size = 1, color=model)+
-  stat_summary(fun.y = "mean", geom = "line", size = 0.5, color=allLoads$migLabel)+
+  #stat_summary(fun = "mean", geom = "line", size = 0.5, color=allLoads$migLabel)+
   theme_bw()+
   #geom_vline(data=dates, aes(xintercept=value))+
-  facet_grid(hLabel~interaction(allLoads$subpopulation),scales="free")+
+  #facet_grid(hLabel~interaction(allLoads$subpopulation),scales="free")+
   ylab("Genetic Load")+
   xlab("Generation") +
   theme(legend.position = "left")+
