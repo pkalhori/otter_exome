@@ -3,13 +3,13 @@ todaysdate=format(Sys.Date(),format="%Y%m%d")
 
 
 data.dir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\"
-popModDate2=c("CA\\1D.3Epoch.LongerRecovery\\20191012\\")
-popModDate=c("AK\\1D.5Epoch\\20200814\\")
+popModDate=c("CA\\1D.3Epoch.LongerRecovery\\20200903\\")
+#popModDate=c("AK\\1D.5Epoch\\20200814\\")
 
 ##AK
 allLoads_old<- read.table(paste(data.dir,popModDate2,"CA_data.txt",sep = ""), header = T)
 
-allLoads<- read.table(paste(data.dir,popModDate,"20200814LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+allLoads<- read.table(paste(data.dir,popModDate,"20200903LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
 
 
@@ -99,7 +99,7 @@ p2 <-
   ylab("Genetic Load")+
   xlab("Generation") +
   theme(legend.position = "left")+
-  ggtitle("Genetic Load for AK 5Epoch")+
+  ggtitle("Genetic Load for CA 3Epoch")+
   #facet_grid(hLabel~population,scales="free")+
   
   #stat_summary(fun.data = allLoads_means_se, geom = "errorbar")+
