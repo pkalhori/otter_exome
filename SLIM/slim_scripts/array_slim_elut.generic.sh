@@ -23,6 +23,7 @@ model=$2 #1D.2Epoch.1.5Mb.cds
 rep=$3 # doing one replicate, then will set from command line from submission script
 rundate=$4 # date arrays are submitted; set in submitter so as not to have jobs on different days
 h=$5
+paper=$6
 # submitter usage: qsub -N name -o outdir -e errordir $script $pop $model $rep $rundate
 
 #wd=$SCRATCH/captures/analyses/slim/cdsSimulations/$pop/$model/h_$h/$rundate/
@@ -44,11 +45,11 @@ seed=$(($todaysdate+$RANDOM+(($RANDOM*$rep*10))+$SGE_TASK_ID)) # uses date, plus
 
 #for h in 0 0.5
 #do
-wd=$SCRATCH/slim/$pop/$model/$rundate/h_s
+wd=$SCRATCH/slim/$pop/$model/$rundate/$paper
 outdir=$wd/replicate_${rep} # set this in submission script 
 mkdir -p $wd
 mkdir -p $outdir
-slimscript=slim_elut_${model}_${pop}_hs.job # specific slim script 
+slimscript=slim_elut_${model}_${pop}_${paper}.job # specific slim script 
 cp $scriptdir/$slimscript $wd/$slimscript.AsRunOn.$todaysdate # make a record of the script as it was run; this is inefficient, copies it for each task in the array
 ######## parameters #############
 $slim \
