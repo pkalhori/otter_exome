@@ -14,12 +14,12 @@ outdir="/u/scratch/p/pkalhori/slim/R_load_calc/AK/"
 #models=c("1D.2Epoch.1.5Mb.cds")
 #simdates=c(20190424,20190607)
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
-popModDates=c("CA/1D.3Epoch.LongerRecovery/20200902") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
+popModDates=c("CA/1D.3Epoch.LongerRecovery/20210121") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 
 #popModDates=c("CA_AK/2D.3Epoch.NoTranslocation/20200816/", "CA_AK/2D.3Epoch.Translocation.1perGen/20200816/","CA_AK/2D.3Epoch.Translocation.5perGen/20200816/","CA_AK/2D.3Epoch.Translocation.10perGen/20200816/","CA_AK/2D.3Epoch.Translocation.25perGen/20200816/", "CA_AK/2D.3Epoch.Translocation.25for2Gen/20200816/")
 #reps=c(seq(1,23))
 reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
-hset=c("s")
+hset=c("Henn")
 #states=c("PreContraction","PostContraction")
 allAvgdInputs=data.frame()
 allLoads=data.frame() 
@@ -28,7 +28,7 @@ for(popModDate in popModDates){
   for(rep in reps){
     print(rep)
     # check if rep exists (some have random hoffman failures)
-    infile=paste(data.dir,popModDate,"/h_s/replicate_",rep,".slim.output.allConcatted.summary.txt.gz",sep="")
+    infile=paste(data.dir,popModDate,"/Henn_hs/replicate_",rep,".slim.output.allConcatted.summary.txt.gz",sep="")
     if(file.exists(infile)){
       input = read.table(infile,sep=",",header=T)
       print("file exists")
@@ -97,6 +97,6 @@ for(popModDate in popModDates){
 #allLoads[allLoads$h==0,]$hLabel <- "h = 0 (rec.)"
 #allLoads[allLoads$h==0.5,]$hLabel <- "h = 0.5 (add.)"
 ## want to write this out as a table so don't have to do it multiple times ###
-write.table(allAvgdInputs,paste(outdir,todaysdate,"AvgHomozygousDerivedGTs.PerInd.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
-write.table(allLoads,paste(outdir,todaysdate,"LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
+write.table(allAvgdInputs,paste(outdir,todaysdate,"_CA_Henn_AvgHomozygousDerivedGTs.PerInd.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
+write.table(allLoads,paste(outdir,todaysdate,"_CA_Henn_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
 

@@ -45,7 +45,7 @@ h=$1  # loop through hs
 # chunk gets set when you run slim (based on SGE task id) # or something?? how to do this part? I don't really want to make a separte slim script each time? have it be a -d thing maybe?
 # have to figure out the chunks/replicates situation.
 
-cat > $scriptdir/slim_elut_${model}_${pop}_hs.job << EOM
+cat > $scriptdir/slim_elut_${model}_${pop}_DengLynch_hs.job << EOM
 
 // changes to make: apparently 1e-03 is reasonable between-gene recomb rate
 // and then want to make separate chromosomes with 0.5 between them (or just simulate them separately)
@@ -103,11 +103,11 @@ initialize() {
 
 1: fitness(m2) {
 // this is from Deng and Lynch: 
-h = 0.5 * exp(-13*abs(mut.selectionCoeff))
+h = 0.5 * exp(-13*abs(mut.selectionCoeff));
 if (homozygous) {
     // 20210107: this was Bernard's code to deal with slight excess heterosis in his Plos Genet paper; we don't need this; initial set of revisions was run with this, but then we re-ran without it for final submission --> return ((1.0 + 0.5*mut.selectionCoeff)*(1.0 + 0.5*mut.selectionCoeff));
     // 20210107: now am calculating homozgyous derived fitness the same as in the other simulations: 
-    return (1.0 + mut.selectionCoeff)
+    return (1.0 + mut.selectionCoeff);
 } else {
 	return (1.0 + mut.selectionCoeff * h);
 }

@@ -1,10 +1,10 @@
 #gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/SLIM
 gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/SLIM
 #models='2D.3Epoch.NoTranslocation 2D.3Epoch.Translocation.1perGen 2D.3Epoch.Translocation.5perGen 2D.3Epoch.Translocation.10perGen 2D.3Epoch.Translocation.25perGen 2D.3Epoch.Translocation.25for2Gen'
-models=1D.3Epoch.LongerRecovery
-papers='DengLynch_hs'
+models=1D.5Epoch
+papers='DengLynch_hs Henn_hs'
 #populations='AK AL CA COM KUR'
-populations=CA # do COM separately below
+populations=AK # do COM separately below
 # loop through models, populations and 25 replicates
 scriptdir=$gitdir/slim_scripts
 
