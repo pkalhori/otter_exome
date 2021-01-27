@@ -3,17 +3,24 @@ todaysdate=format(Sys.Date(),format="%Y%m%d")
 
 
 data.dir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\"
-popModDate=c("CA\\1D.3Epoch.LongerRecovery\\20200903\\")
-#popModDate=c("AK\\1D.5Epoch\\20200814\\")
+#popModDate=c("CA\\1D.3Epoch.LongerRecovery\\20210123\\")
+popModDate=c("AK\\1D.5Epoch\\20210123\\")
 
 ##AK
 allLoads_old<- read.table(paste(data.dir,popModDate2,"CA_data.txt",sep = ""), header = T)
 
-allLoads<- read.table(paste(data.dir,popModDate,"20200903LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+allLoads<- read.table(paste(data.dir,popModDate,"20210123_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
+allLoads_Henn <- read.table(paste(data.dir,popModDate,"20210123_CA_Henn_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
+allLoads_Henn$htype <- "Henn_hs"
 
-allLoads<- rbind.data.frame(allLoads_AK)
+allLoads_DengLynch <- read.table(paste(data.dir,popModDate,"20210123_CA_DengLynch_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+
+allLoads_Henn$htype <- "Henn_hs"
+allLoads_DengLynch$htype <- "DengLynch_hs"
+
+allLoads<- rbind.data.frame(allLoads_Henn,allLoads_DengLynch)
 
 
 # label H:
@@ -37,7 +44,7 @@ dates_df <- data.frame(
   years = c(36,36)
 )
 allLoads_means_se <- allLoads %>% 
-  group_by(generation) %>% # Group the data by manufacturer
+  group_by(generation,htype) %>% # Group the data by manufacturer
   summarize(mean_load=mean(L), # Create variable with mean of cty per group
             sd_load=sd(L), # Create variable with sd of cty per group
             N_load=n(), # Create new variable N of cty per group
@@ -90,8 +97,8 @@ Pre_Contraction/Post_Contraction
 
 
 p2 <- 
-  ggplot(allLoads_means_se,aes(x=generation,y=mean_load))+
-  geom_line(position=position_dodge(.5),size = 1,alpha=0.5,color="blue")+
+  ggplot(allLoads_means_se,aes(x=generation,y=mean_load,color=htype))+
+  geom_line(position=position_dodge(.5),size = 1,alpha=0.5)+
   #stat_summary(fun.y = "mean", geom = "point", size = 1, color=model)+
   #stat_summary(fun.y = "mean", geom = "line", size = 0.5)+
   theme_bw()+
@@ -99,7 +106,7 @@ p2 <-
   ylab("Genetic Load")+
   xlab("Generation") +
   theme(legend.position = "left")+
-  ggtitle("Genetic Load for CA 3Epoch")+
+  ggtitle("Genetic Load for AK 5Epoch")+
   #facet_grid(hLabel~population,scales="free")+
   
   #stat_summary(fun.data = allLoads_means_se, geom = "errorbar")+
