@@ -3,21 +3,22 @@ todaysdate=format(Sys.Date(),format="%Y%m%d")
 
 
 data.dir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\"
-#popModDate=c("CA\\1D.3Epoch.LongerRecovery\\20210123\\")
-popModDate=c("AK\\1D.5Epoch\\20210123\\")
+popModDate=c("CA\\1D.3Epoch.LongerRecovery\\20210126\\")
+
+popModDate2=c("CA\\1D.3Epoch.LongerRecovery\\20210123\\")
 
 ##AK
 allLoads_old<- read.table(paste(data.dir,popModDate2,"CA_data.txt",sep = ""), header = T)
 
 allLoads<- read.table(paste(data.dir,popModDate,"20210123_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
-allLoads_Henn <- read.table(paste(data.dir,popModDate,"20210123_CA_Henn_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+allLoads_Henn <- read.table(paste(data.dir,popModDate2,"20210123_CA_Henn_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
 allLoads_Henn$htype <- "Henn_hs"
 
-allLoads_DengLynch <- read.table(paste(data.dir,popModDate,"20210123_CA_DengLynch_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+allLoads_DengLynch <- read.table(paste(data.dir,popModDate,"20210126_DengLynch_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
-allLoads_Henn$htype <- "Henn_hs"
+
 allLoads_DengLynch$htype <- "DengLynch_hs"
 
 allLoads<- rbind.data.frame(allLoads_Henn,allLoads_DengLynch)
@@ -110,7 +111,7 @@ p2 <-
   #facet_grid(hLabel~population,scales="free")+
   
   #stat_summary(fun.data = allLoads_means_se, geom = "errorbar")+
-  geom_errorbar(data=allLoads_means_se, mapping=aes(ymin=lower_limit,ymax=upper_limit),color="green",size=0.1)+
+  geom_errorbar(data=allLoads_means_se, mapping=aes(ymin=lower_limit,ymax=upper_limit),size=0.1)+
   geom_vline(xintercept=36)
   #geom_vline(xintercept=50)+
   #geom_vline(xintercept=56)
