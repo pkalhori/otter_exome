@@ -5,7 +5,7 @@ require(ggplot2)
 #library(tidyverse)
 library(dplyr)
 todaysdate=format(Sys.Date(),format="%Y%m%d")
-
+#C:\Users\poone\OneDrive\Documents\Otter_Exome_Project\SLIM_results\CA\1D.3Epoch.LongerRecovery\20210126
 data.dir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\"
 outdir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\genetic_load_calcs"
 #plot.dir="/Users/annabelbeichman/Documents/UCLA/Otters/OtterExomeProject/results/analysisResults/slim/poonehSimulations/loadCalcs/"
@@ -14,12 +14,13 @@ outdir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results
 #models=c("1D.2Epoch.1.5Mb.cds")
 #simdates=c(20190424,20190607)
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
-popModDates=c("CA\\1D.3Epoch.LongerRecovery\\20200804") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
+popModDate=c("CA\\1D.3Epoch.LongerRecovery\\20210126") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 #reps=c(seq(1,23))
-infile=paste(data.dir,popModDate,"\\h_s","\\replicate_1",".slim.output.allConcatted.summary.txt.gz",sep="")
+infile=paste(data.dir,popModDate,"\\replicate_1",".slim.output.allConcatted.summary.txt",sep="")
+
 input = read.table(infile,sep=",",header=T)
 input$h <- NA
-input$h <- (0.5)/(1 - 7071.07*(input$s))
+input$h <- 0.5 * exp(-13*abs(input$s))
 input_filtered_neutral_removed <- input[input$s!=0,]
 
 
@@ -27,7 +28,6 @@ length(input$s==0)
 length(input$s)
 input$s
 
-library(rgl)
 hs <- ggplot(input_filtered_neutral_removed,aes(x=s, y=h))+
   geom_point()
 hs_full <- ggplot(input,aes(x=s, y=h))+

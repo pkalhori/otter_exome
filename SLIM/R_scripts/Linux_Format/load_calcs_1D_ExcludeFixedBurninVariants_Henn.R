@@ -14,11 +14,13 @@ outdir="/u/scratch/p/pkalhori/slim/R_load_calc/AK/"
 #models=c("1D.2Epoch.1.5Mb.cds")
 #simdates=c(20190424,20190607)
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
-popModDates=c("CA/1D.3Epoch.LongerRecovery/20210121/","AK/1D.5Epoch/20210121/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
+popModDates=c("CA/1D.3Epoch.LongerRecovery/20210121/","AK/1D.5Epoch/20210121") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 
-
+#popModDates=c("CA_AK/2D.3Epoch.NoTranslocation/20200816/", "CA_AK/2D.3Epoch.Translocation.1perGen/20200816/","CA_AK/2D.3Epoch.Translocation.5perGen/20200816/","CA_AK/2D.3Epoch.Translocation.10perGen/20200816/","CA_AK/2D.3Epoch.Translocation.25perGen/20200816/", "CA_AK/2D.3Epoch.Translocation.25for2Gen/20200816/")
+#reps=c(seq(1,23))
 reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
 
+#states=c("PreContraction","PostContraction")
 allAvgdInputs=data.frame()
 allLoads=data.frame() 
 # get avg homozygous derived per individual : (get hets too?)
@@ -26,7 +28,7 @@ for(popModDate in popModDates){
   for(rep in reps){
     print(rep)
     # check if rep exists (some have random hoffman failures)
-    infile=paste(data.dir,popModDate,"DengLynch_hs/replicate_",rep,".slim.output.allConcatted.summary.txt.gz",sep="")
+    infile=paste(data.dir,popModDate,"Henn_hs/replicate_",rep,".slim.output.allConcatted.summary.txt.gz",sep="")
     if(file.exists(infile)){
       input = read.table(infile,sep=",",header=T)
       print("file exists")
@@ -36,8 +38,8 @@ for(popModDate in popModDates){
       # give each mutation a unique ID that is their chunk (ie chromosome #) and mutid
       # you need this because mutIDs can be duplicated between chunks, but not within a chunk
       input$h <- NA
-      input$h <- 0.5 * exp(-13*abs(s))
-      input$htype <- "DengLynch"
+      input$h <- (0.5)/(1 - 7071.07*(input$s))
+      input$htype <- "Henn"
       input$chunk.mutID <- paste(input$chunk,".",input$mutid,sep="")
       fixedToRemove <- input[(input$gen==0 & input$numhom==input$popsizeDIP),]$chunk.mutID # ~4000 sites per replicate. cool
       # should each be a unique value:
@@ -72,14 +74,14 @@ for(popModDate in popModDates){
       # want to get total S per generation:
       # want to get totals and avgs across all chunks per generation
       avgHomPerIndPersCat <- inputWithFixedRemoved %>%
-        group_by(generation,population,htype,sCat,model,replicate,popModDate,popsizeDIP) %>%
+        group_by(generation,population,sCat,model,replicate,popModDate,popsizeDIP) %>%
         summarise(totalNumHom=sum(numhom),totalHet=sum(numhet)) %>%
         mutate(avgHomPerInd=totalNumHom/popsizeDIP) %>%
         mutate(avgHetPerInd=totalHet/popsizeDIP) %>%
         mutate(avgDerivedAllelesPerInd=((2*totalNumHom)+totalHet)/(2*popsizeDIP))
       # don't group by sCat for load calcs:
       LoadPerGeneration <- inputWithFixedRemoved %>%
-        group_by(generation,population,htype,model,replicate,popModDate,popsizeDIP) %>%
+        group_by(generation,population,model,htype,replicate,popModDate,popsizeDIP) %>%
         summarise(totalS=sum(loadComponent))
       LoadPerGeneration$W <- exp(-LoadPerGeneration$totalS)
       LoadPerGeneration$L  = 1 - LoadPerGeneration$W # mutation load 
@@ -89,8 +91,8 @@ for(popModDate in popModDates){
     }}}
 
 
-write.table(allAvgdInputs,paste(outdir,todaysdate,"_DengLynch_AvgHomozygousDerivedGTs.PerInd.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
-write.table(allLoads,paste(outdir,todaysdate,"_DengLynch_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
+write.table(allAvgdInputs,paste(outdir,todaysdate,"_Henn_AvgHomozygousDerivedGTs.PerInd.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
+write.table(allLoads,paste(outdir,todaysdate,"_Henn_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
 
 
 
