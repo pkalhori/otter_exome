@@ -52,7 +52,7 @@ for(popModDate in popModDates){
       # want to get load:
       inputWithFixedRemoved$qFreq <- (inputWithFixedRemoved$numhet + (2*inputWithFixedRemoved$numhom)) / (2*inputWithFixedRemoved$popsizeDIP)
       inputWithFixedRemoved$pFreq <- 1 - inputWithFixedRemoved$qFreq
-      inputWithFixedRemoved$loadComponent <- (2*h*abs(inputWithFixedRemoved$s)*inputWithFixedRemoved$qFreq*inputWithFixedRemoved$pFreq) + (abs(inputWithFixedRemoved$s)*((inputWithFixedRemoved$qFreq)^2))
+      inputWithFixedRemoved$loadComponent <- (2*inputWithFixedRemoved$h*abs(inputWithFixedRemoved$s)*inputWithFixedRemoved$qFreq*inputWithFixedRemoved$pFreq) + (abs(inputWithFixedRemoved$s)*((inputWithFixedRemoved$qFreq)^2))
       # want to categorize by s
       inputWithFixedRemoved$popModDate <- popModDate
       inputWithFixedRemoved$sCat <- NA

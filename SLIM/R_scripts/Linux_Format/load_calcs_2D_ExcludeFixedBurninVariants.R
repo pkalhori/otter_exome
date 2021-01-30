@@ -14,7 +14,7 @@ outdir="/u/scratch/p/pkalhori/slim/R_load_calc/CA_AK/"
 #models=c("1D.2Epoch.1.5Mb.cds")
 #simdates=c(20190424,20190607)
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
-popModDates=c("CA_AK/2D.3Epoch.NoTranslocation/20210123/", "CA_AK/2D.3Epoch.Translocation.1perGen/20210123/","CA_AK/2D.3Epoch.Translocation.25perGen/20210123/", "CA_AK/2D.3Epoch.Translocation.25for2Gen/20210123/" ) # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
+popModDates=c("CA_AK/2D.3Epoch.NoTranslocation/20210123/", "CA_AK/2D.3Epoch.Translocation.1perGen/20210123/","CA_AK/2D.3Epoch.Translocation.25perGen/20210123/", "CA_AK/2D.3Epoch.Translocation.25for2Gen/20210123/" ) # AK and AL have dadi parameters, genericPop has parameters based on AK    MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 #reps=c(seq(1,23))
 reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
 
@@ -51,7 +51,7 @@ for(rep in reps){
     # want to get load:
     inputWithFixedRemoved$qFreq <- (inputWithFixedRemoved$numhet + (2*inputWithFixedRemoved$numhom)) / (2*inputWithFixedRemoved$popsizeDIP)
     inputWithFixedRemoved$pFreq <- 1 - inputWithFixedRemoved$qFreq
-    inputWithFixedRemoved$loadComponent <- (2*h*abs(inputWithFixedRemoved$s)*inputWithFixedRemoved$qFreq*inputWithFixedRemoved$pFreq) + (abs(inputWithFixedRemoved$s)*((inputWithFixedRemoved$qFreq)^2))
+    inputWithFixedRemoved$loadComponent <- (2*inputWithFixedRemoved$h*abs(inputWithFixedRemoved$s)*inputWithFixedRemoved$qFreq*inputWithFixedRemoved$pFreq) + (abs(inputWithFixedRemoved$s)*((inputWithFixedRemoved$qFreq)^2))
     # want to categorize by s
     inputWithFixedRemoved$popModDate <- popModDate
     inputWithFixedRemoved$sCat <- NA
