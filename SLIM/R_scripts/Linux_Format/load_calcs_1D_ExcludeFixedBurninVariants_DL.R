@@ -7,14 +7,14 @@ library(dplyr)
 todaysdate=format(Sys.Date(),format="%Y%m%d")
 
 data.dir="/u/scratch/p/pkalhori/slim/concattedSummaries/"
-outdir="/u/scratch/p/pkalhori/slim/R_load_calc/AK/"
+outdir="/u/scratch/p/pkalhori/slim/R_load_calc/"
 #plot.dir="/Users/annabelbeichman/Documents/UCLA/Otters/OtterExomeProject/results/analysisResults/slim/poonehSimulations/loadCalcs/"
 #dir.create(plot.dir)
 #pops=c("AK","AL","genericPop.LongerContract")
 #models=c("1D.2Epoch.1.5Mb.cds")
 #simdates=c(20190424,20190607)
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
-<<<<<<< HEAD
+
 #popModDates=c("AK/1D.5Epoch/20210121/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 
 popModDates=c("CA_AK/2D.3Epoch.NoTranslocation/20210127/", "CA_AK/2D.3Epoch.Translocation.1perGen/20210127/","CA_AK/2D.3Epoch.Translocation.25perGen/20210127/", "CA_AK/2D.3Epoch.Translocation.25for2Gen/20210127/")
@@ -22,13 +22,13 @@ popModDates=c("CA_AK/2D.3Epoch.NoTranslocation/20210127/", "CA_AK/2D.3Epoch.Tran
 reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
 #hset=c("DengLynch_hs", "Henn_hs")
 #states=c("PreContraction","PostContraction")
-=======
+
 popModDates=c("CA/1D.3Epoch.LongerRecovery/20210121/","AK/1D.5Epoch/20210121/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 
 
 reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
 
->>>>>>> b15b6bc3d957fea5fc395626f0d968947f248dbc
+
 allAvgdInputs=data.frame()
 allLoads=data.frame() 
 # get avg homozygous derived per individual : (get hets too?)
@@ -46,12 +46,9 @@ for(popModDate in popModDates){
       # give each mutation a unique ID that is their chunk (ie chromosome #) and mutid
       # you need this because mutIDs can be duplicated between chunks, but not within a chunk
       input$h <- NA
-<<<<<<< HEAD
       input$h <- 0.5 * exp(-13*abs(input$s))
-=======
-      input$h <- 0.5 * exp(-13*abs(s))
       input$htype <- "DengLynch"
->>>>>>> b15b6bc3d957fea5fc395626f0d968947f248dbc
+
       input$chunk.mutID <- paste(input$chunk,".",input$mutid,sep="")
       fixedToRemove <- input[(input$gen==0 & input$numhom==input$popsizeDIP),]$chunk.mutID # ~4000 sites per replicate. cool
       # should each be a unique value:

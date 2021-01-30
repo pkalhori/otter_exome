@@ -34,7 +34,7 @@ for(popModDate in popModDates){
       # want to exclude sites that are at frequency 1 *prior* to the bottleneck
       pop= unlist(lapply(strsplit(popModDate,"/"),"[",1))
       input$h <- NA
-      input$h <-  0.5 * exp(-13*abs(s))
+      input$h <-  0.5 * exp(-13*abs(input$s))
       input$htype <- "DengLynch"
       # any sites that are at frequency 1 prior to the bottleneck (at gen 0) should be excluded from load calcs. If they are at frequency 1 only after the bottleneck they can stay to be part of load. This will be if geneartion <= bneckGen (model specific) and if the numhom==popsizeDIP. can't just go by mutid because those can be duplicated across chunks. Must go by chunk AND mutID within a replicate. Then need to remove them at all other time points.... 
       # give each mutation a unique ID that is their chunk (ie chromosome #) and mutid
