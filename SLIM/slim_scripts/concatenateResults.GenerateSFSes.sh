@@ -19,8 +19,8 @@ gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_ex
 
 rundate=20210123 # set of simulations you're interested in (if is across different rundates you can list popsModelsRundates explicitly)
 hs="DengLynch_hs Henn_hs" # set of hs you're interested in
-popMods="CA_AK/2D.3Epoch.NoTranslocation CA_AK/2D.3Epoch.Translocation.25for2Gen CA_AK/2D.3Epoch.Translocation.1perGen CA_AK/2D.3Epoch.Translocation.25perGen" # population and corresponding models you're interested in
-#popMods=CA/1D.3Epoch.LongerRecovery
+#popMods="CA_AK/2D.3Epoch.NoTranslocation CA_AK/2D.3Epoch.Translocation.25for2Gen CA_AK/2D.3Epoch.Translocation.1perGen CA_AK/2D.3Epoch.Translocation.25perGen" # population and corresponding models you're interested in
+popMods=CA_AK/2D.3Epoch.Translocation.25perGen
 # you can have multiple models per population just list as: AK/1D.2Epoch.1.5Mb.cds AK/OtherModel in the popMods variable
 popsModelsRundates=""
 for i in $popMods
