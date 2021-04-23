@@ -3,26 +3,23 @@ todaysdate=format(Sys.Date(),format="%Y%m%d")
 
 
 data.dir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\"
-popModDate=c("CA\\1D.3Epoch.LongerRecovery\\20210126\\")
+popModDate=c("CA\\1D.3Epoch.LongerRecovery\\20210205\\")
 
-popModDate2=c("CA\\1D.3Epoch.LongerRecovery\\20210123\\")
+
 
 ##AK
-allLoads_old<- read.table(paste(data.dir,popModDate2,"CA_data.txt",sep = ""), header = T)
-
-allLoads<- read.table(paste(data.dir,popModDate,"20210123_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
-
-allLoads_Henn <- read.table(paste(data.dir,popModDate2,"20210123_CA_Henn_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
-
-allLoads_Henn$htype <- "Henn_hs"
-
-allLoads_DengLynch <- read.table(paste(data.dir,popModDate,"20210126_DengLynch_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
 
-allLoads_DengLynch$htype <- "DengLynch_hs"
+allLoads_Henn<- read.table(paste(data.dir,"20210131_Henn_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+
+
+allLoads_DengLynch <- read.table(paste(data.dir,popModDate,"20210206_DengLynch_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+
+
 
 allLoads<- rbind.data.frame(allLoads_Henn,allLoads_DengLynch)
-
+scratch <- allLoads_Henn[allLoads_Henn$population=="CA",] 
+length(unique(scratch$replicate))
 
 # label H:
 
@@ -45,7 +42,7 @@ dates_df <- data.frame(
   years = c(36,36)
 )
 allLoads_means_se <- allLoads %>% 
-  group_by(generation,htype) %>% # Group the data by manufacturer
+  group_by(generation,htype,population) %>% # Group the data by manufacturer
   summarize(mean_load=mean(L), # Create variable with mean of cty per group
             sd_load=sd(L), # Create variable with sd of cty per group
             N_load=n(), # Create new variable N of cty per group
@@ -85,7 +82,7 @@ Post_Contraction <- allLoads_means_se$mean_load[allLoads_means_se$generation==36
 Pre_Contraction <-allLoads_means_se$mean_load[allLoads_means_se$generation==0 & allLoads_means_se$hLabel=="Recessive"]
 Post_Contraction <- allLoads_means_se$mean_load[allLoads_means_se$generation==36 & allLoads_means_se$hLabel=="Recessive"]
 (Post_Contraction-Pre_Contraction)/Pre_Contraction
-
+allLoads[allLoads$population=="AK"&allLoads$htype=="Henn"]
 
 ##Additive
 Pre_Contraction <-allLoads_means_se_old$mean_load[allLoads_means_se_old$generation==0 & allLoads_means_se_old$h==0]
@@ -97,7 +94,7 @@ Pre_Contraction/Post_Contraction
 
 
 
-p2 <- 
+AK <- 
   ggplot(allLoads_means_se,aes(x=generation,y=mean_load,color=htype))+
   geom_line(position=position_dodge(.5),size = 1,alpha=0.5)+
   #stat_summary(fun.y = "mean", geom = "point", size = 1, color=model)+
@@ -107,8 +104,8 @@ p2 <-
   ylab("Genetic Load")+
   xlab("Generation") +
   theme(legend.position = "left")+
-  ggtitle("Genetic Load for AK 5Epoch")+
-  #facet_grid(hLabel~population,scales="free")+
+  ggtitle("Genetic Load 1D Models")+
+  facet_grid(~population,scales="free")+
   
   #stat_summary(fun.data = allLoads_means_se, geom = "errorbar")+
   geom_errorbar(data=allLoads_means_se, mapping=aes(ymin=lower_limit,ymax=upper_limit),size=0.1)+
@@ -120,7 +117,7 @@ plot.dir<-"C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_resu
 ggsave(paste(plot.dir,"5Epoch_AK_hs_",todaysdate,".pdf",sep=""),p2,height=6,width=8)
 #theme(legend.title=element_blank())
 
-head(allLoads)
+
 p3 <- 
   ggplot(allLoads,aes(x=generation,y=L))+
   #geom_line(position=position_dodge(.5),size = .1,alpha=0.5)+
@@ -128,7 +125,7 @@ p3 <-
   stat_summary(fun = "mean", geom = "line", size = 0.5)+
   theme_bw()+
   #geom_vline(data=dates, aes(xintercept=value))+
-  #facet_grid(hLabel~interaction(allLoads$subpopulation),scales="free")+
+  facet_grid(htype~interaction(allLoads$population),scales="free")+
   ylab("Genetic Load")+
   xlab("Generation") +
   theme(legend.position = "left")+

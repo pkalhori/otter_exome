@@ -1,10 +1,10 @@
 library(ggplot2)
-citation("ggplot2")
+
 
 data.dir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\"
 
 ##this one excludes burn in variants
-popModDate=c("CA_AK\\2D.3Epoch.Translocation\\20200831\\")
+popModDate=c("CA_AK\\2D.3Epoch.Translocation\\20210131\\")
 
 #popModDate2=c("CA_AK\\2D.3Epoch.Translocation\\20191023\\")
 
@@ -12,20 +12,22 @@ popModDate=c("CA_AK\\2D.3Epoch.Translocation\\20200831\\")
 popModDate2=c("CA_AK\\2D.3Epoch.Translocation\\20191113\\")
 
 ##removing burn in
-allLoads<- read.table(paste(data.dir,popModDate,"20200831LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+allLoads_DengLynch<- read.table(paste(data.dir,popModDate,"20210131_DengLynch_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
-allLoads_no_migration <- allLoads[allLoads$model=="2D.3Epoch.NoTranslocation",]
 
-#cntinual mig
-#allLoads2<- read.table(paste(data.dir,popModDate2,"migs_data.txt",sep = ""), header = T)
+allLoads_Henn<- read.table(paste(data.dir,popModDate,"20210201_Henn_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
-##including burn in variants
-allLoads <- read.table(paste(data.dir,popModDate2,"nomig_data.txt",sep = ""), header = T)
+scratch_nomig <- allLoads_Henn[allLoads_Henn$model=="2D.3Epoch.Translocation.25for2Gen",]
+
+length(unique(scratch_nomig$replicate))
+
+allLoads <- rbind(allLoads_Henn, allLoads_DengLynch)
+
 
 
 # label H:
 
-allLoads$hLabel <- paste("h = ",allLoads$h)
+
 allLoads <- allLoads[allLoads$generation>=4000,]
 allLoads$subpop[allLoads$subpop==1] <- "AK"
 allLoads$subpop[allLoads$subpop==2] <- "CA"
@@ -38,8 +40,8 @@ allLoads_no_migration$subpopulation[allLoads_no_migration$subpop==2] <- "CA"
 
 allLoads$migLabel <- NA
 allLoads[allLoads$model=="2D.3Epoch.Translocation.1perGen",]$migLabel <- "1 ind/gen"
-allLoads[allLoads$model=="2D.3Epoch.Translocation.10perGen",]$migLabel <- "10 ind/gen"
-allLoads[allLoads$model=="2D.3Epoch.Translocation.5perGen",]$migLabel <- "5 ind/gen"
+#allLoads[allLoads$model=="2D.3Epoch.Translocation.10perGen",]$migLabel <- "10 ind/gen"
+#allLoads[allLoads$model=="2D.3Epoch.Translocation.5perGen",]$migLabel <- "5 ind/gen"
 allLoads[allLoads$model=="2D.3Epoch.Translocation.25perGen",]$migLabel <- "25 ind/gen"
 allLoads[allLoads$model=="2D.3Epoch.Translocation.25for2Gen",]$migLabel <- "25 ind for 2 gen"
 allLoads[allLoads$model=="2D.3Epoch.NoTranslocation",]$migLabel <- "No Migrants"
@@ -58,7 +60,7 @@ dates_df <- data.frame(
   dates = c(4002,4038,4056,4002,4038,4056)
 )
 allLoads_means_se <- allLoads %>%
-  group_by(generation,subpop,migLabel,model) %>% # Group the data by manufacturer
+  group_by(generation,subpop,migLabel,model,htype) %>% # Group the data by manufacturer
   summarize(mean_load=mean(L), # Create variable with mean of cty per group
             sd_load=sd(L), # Create variable with sd of cty per group
             N_load=n(), # Create new variable N of cty per group
@@ -100,8 +102,9 @@ p2 <-
   ylab("Genetic Load")+
   xlab("Generation") +
   theme(legend.position = "left")+
-  ggtitle("Genetic Load for 3 Epoch Model")+
-  facet_grid(allLoads_means_se$subpop~.)
+  ggtitle("Genetic Load for 2D Models")+
+  facet_grid(htype~interaction(subpop),scales="free")
+  #facet_grid(allLoads_means_se$subpop~.)
 
 #stat_summary(fun.data = allLoads_means_se, geom = "errorbar")+
 #geom_errorbar(data=allLoads_means_se, mapping=aes(ymin=lower_limit,ymax=upper_limit),color="green",size=0.1)
