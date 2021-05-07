@@ -1,12 +1,12 @@
 #! /bin/bash
 #$ -cwd
 #$ -l h_rt=10:00:00,h_data=10G
-#$ -N SLiMInference
+#$ -N vcfUnzip
 #$ -o /u/scratch/p/pkalhori
 #$ -e /u/scratch/p/pkalhori
 #$ -m abe
 #$ -M pkalhori
-#$ -t 1-2
+#$ -t 16-35
 
 Daniel_vcfdir=/u/project/rwayne/software/rails/VCF_FILES_MISSING_SITES
 
