@@ -6,7 +6,7 @@
 #$ -e /u/scratch/p/pkalhori
 #$ -m abe
 #$ -M pkalhori
-#$ -t 10-15:1
+#$ -t 1-2
 
 Daniel_vcfdir=/u/project/rwayne/software/rails/VCF_FILES_MISSING_SITES
 

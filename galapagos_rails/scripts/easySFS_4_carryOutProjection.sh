@@ -2,8 +2,8 @@
 #$ -cwd
 #$ -l h_rt=20:00:00,h_data=16G
 #$ -N easySFSProjection2
-#$ -o /u/scratch/pkalhori/rails
-#$ -e /u/scratch/pkalhori/rails
+#$ -o /u/scratch/p/pkalhori/rails
+#$ -e /u/scratch/p/pkalhori/rails
 #$ -m abe
 #$ -M pkalhori
 

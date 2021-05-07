@@ -17,13 +17,13 @@ outdir="/u/scratch/p/pkalhori/slim/R_load_calc/"
 
 #popModDates=c("AK/1D.5Epoch/20210121/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 
-popModDates=c("CA_AK/2D.3Epoch.NoTranslocation/20210127/", "CA_AK/2D.3Epoch.Translocation.1perGen/20210127/","CA_AK/2D.3Epoch.Translocation.25perGen/20210127/", "CA_AK/2D.3Epoch.Translocation.25for2Gen/20210127/")
+#popModDates=c("CA_AK/2D.3Epoch.NoTranslocation/20210127/", "CA_AK/2D.3Epoch.Translocation.1perGen/20210127/","CA_AK/2D.3Epoch.Translocation.25perGen/20210127/", "CA_AK/2D.3Epoch.Translocation.25for2Gen/20210127/")
 #reps=c(seq(1,23))
 reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
 #hset=c("DengLynch_hs", "Henn_hs")
 #states=c("PreContraction","PostContraction")
 
-popModDates=c("CA/1D.3Epoch.LongerRecovery/20210121/","AK/1D.5Epoch/20210121/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
+popModDates=c("CA/1D.3Epoch.LongerRecovery/20210205/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 
 
 reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output

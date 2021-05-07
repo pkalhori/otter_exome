@@ -65,11 +65,11 @@ for(popModDate in popModDates){
       date= unlist(lapply(strsplit(popModDate,"/"),"[",3))
       inputWithFixedRemoved$population <- pop
       #input$state <- state
-      inputWithFixedRemoved$h <- h
+      #inputWithFixedRemoved$h <- h
       inputWithFixedRemoved$model <- model
       inputWithFixedRemoved$date <- date
       inputWithFixedRemoved$replicate <- rep
-      inputWithFixedRemoved$htype <- htype
+      #inputWithFixedRemoved$htype <- htype
       #inputWithFixedRemoved$subpopulation <- subpop
       # want to get total S per generation:
       # want to get totals and avgs across all chunks per generation
