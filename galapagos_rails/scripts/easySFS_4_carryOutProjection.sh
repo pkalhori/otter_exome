@@ -1,6 +1,6 @@
 #! /bin/bash
 #$ -cwd
-#$ -l h_rt=20:00:00,h_data=16G
+#$ -l rh7,h_data=50G
 #$ -N easySFSProjection2
 #$ -o /u/scratch/p/pkalhori/rails
 #$ -e /u/scratch/p/pkalhori/rails
@@ -45,7 +45,7 @@ projections="14"
 ### NOTE: projection values must be in same order as populations are in your popFile (this isn't ideal -- at some point I am going to modify the easySFS script)
 # note that order is CA,AK,AL,COM,KUR 
 
-outdir=/u/scratch/pkalhori/rails/easySFS/projection-${todaysdate}
+outdir=/u/scratch/p/pkalhori/rails/easySFS/projection-${todaysdate}
 #snpVCFdir=/u/scratch/pkalhori/rails/snpVCFs
 mkdir -p $outdir
 #mkdir -p $snpVCFdir
