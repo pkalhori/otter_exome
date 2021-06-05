@@ -1,13 +1,13 @@
 #! /bin/bash
 #$ -cwd
-#$ -l h_rt=30:00:00,h_data=16G,highp
+#$ -l rh7,h_data=50G
 #$ -N easySFSPreview
 #$ -o /u/scratch/p/pkalhori/rails/logs
 #$ -e /u/scratch/p/pkalhori/rails/logs
 #$ -m abe
 #$ -M pkalhori
-#$ -t 10-15:1
-
+#$ -t 1-35:1
+#$ -V
 ####### Easy SFS
 # https://github.com/isaacovercast/easySFS
 # install:
@@ -15,18 +15,26 @@
 # cd easySFS
 # chmod +x *.py
 # easySFS.py
+
+
 source /u/local/Modules/default/init/modules.sh
-module load python/2.7
+#module load python/2.7
 module load samtools
+module load anaconda3/2020.11
+. /u/local/apps/anaconda3/2020.11/etc/profile.d/conda.sh
+
+conda activate dadi
+
 #bgzip=/u/home/a/ab08028/klohmueldata/annabel_data/bin/tabix-0.2.6/bgzip
 maxHetFilter=0.75 # het filter used across all samples (per population het filter occurs during easy sfs)
 todaysdate=`date +%Y%m%d`
 #genotypeDate=20181119
-vcfdir=/u/scratch/p/pkalhori/rails/VCFs_Missing_sites
-popFile=popfile=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/galapagos_rails/pinta.PCA.txt # this doesn't have baja on it; doesn't have any admixed/bad inds on it. 
+vcfdir=/u/scratch/p/pkalhori/rails/VCFs_Missing_sites_Test
+scriptdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/galapagos_rails/scripts
+popFile=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/galapagos_rails/pinta.PCA.txt # this doesn't have baja on it; doesn't have any admixed/bad inds on it. 
 # this has admixed in it , but they aren't in pop file
 easySFS=$scriptdir/easySFS.abModified.3.noInteract.Exclude01Sites.HetFiltering.20181121.py  # this is my modification
-outdir=/u/scratch/pkalhori/rails/easySFS/projection_preview/$todaysdate
+outdir=/u/scratch/p/pkalhori/rails/easySFS/projection_preview/$todaysdate
 mkdir -p $outdir
 # had to modify easySFS so that it wouldn't prompt a "yes/no" response about samples that are missing from VCF file
 # want it to just output that info and continue , not prompt yes/no.

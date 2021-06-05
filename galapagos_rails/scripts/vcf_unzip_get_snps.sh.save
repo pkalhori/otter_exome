@@ -6,12 +6,11 @@
 #$ -e /u/scratch/p/pkalhori
 #$ -m abe
 #$ -M pkalhori
-#$ -t 3-35
+#$ -t 10-35
 
 Daniel_vcfdir=/u/project/rwayne/software/rails/VCF_FILES_MISSING_SITES
 
-vcfdir=/u/scratch/p/pkalhori/rails/VCFs_Missing_sites_Test
-mkdir -p $vcfdir
+vcfdir=/u/scratch/p/pkalhori/rails/VCFs_Missing_sites_2
 
 source /u/local/Modules/default/init/modules.sh
 module load samtools

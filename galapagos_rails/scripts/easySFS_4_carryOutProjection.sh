@@ -23,14 +23,17 @@ module load bcftools
 todaysdate=`date +%Y%m%d`
 genotypeDate=20181119
 noCallFrac=1.0
-vcfdir=/u/project/rwayne/software/rails/VCF_FILES
-pops=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/galapagos_rails/pinta.PCA.txt
+vcfdir=/u/scratch/p/pkalhori/rails/VCFs_Missing_sites_Test
+scriptdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/galapagos_rails/scripts
+#vcfdir=/u/project/rwayne/software/rails/VCF_FILES
+#pops=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/galapagos_rails/pinta.PCA.txt
+pops="PIN"
 popfile=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/galapagos_rails/pinta.PCA.txt
 # this has admixed in it , but they aren't in pop file
-easySFS=/u/home/a/ab08028/klohmueldata/annabel_data/bin/easySFS/easySFS.abContinueMod.py 
+easySFS=$scriptdir/easySFS.abModified.3.noInteract.Exclude01Sites.HetFiltering.20181121.py 
 
-gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/galapagos_rails
-scriptdir=${gitdir}/scripts
+#gitdir=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/galapagos_rails
+
 
 
 #easySFS=$scriptdir/easySFS.abModified.3.noInteract.Exclude01Sites.HetFiltering.20181121.py  # this is my modification
@@ -39,29 +42,29 @@ scriptdir=${gitdir}/scripts
 ## choose your projections: choosing for now: 
 # CA,AK,AL,COM,KUR 
 #projections="12,14,16,16,12" # may change these after lab meeting
-projections="18"
+projections="14"
 ### NOTE: projection values must be in same order as populations are in your popFile (this isn't ideal -- at some point I am going to modify the easySFS script)
 # note that order is CA,AK,AL,COM,KUR 
 
 outdir=/u/scratch/pkalhori/rails/easySFS/projection-${todaysdate}
-snpVCFdir=/u/scratch/pkalhori/rails/snpVCFs
+#snpVCFdir=/u/scratch/pkalhori/rails/snpVCFs
 mkdir -p $outdir
-mkdir -p $snpVCFdir
+#mkdir -p $snpVCFdir
 # had to modify easySFS so that it wouldn't prompt a "yes/no" response about samples that are missing from VCF file
 # write projection choices into a readme
 
 echo "PIN : $projections " > $outdir/projectionChoices.${todaysdate}.txt
 # make sure vcf isn't zipped
 
-allVCF=Neutral_sites_SFS_ALL_1.vcf.gz
+allVCF=Neutral_sites_SFS_ALL_1.vcf
 #extract only SNPs
 snpVCF=Neutral_sites_SNPs_only_1.vcf
-bcftools view -c 1:minor ${vcfdir}/${allVCF} > ${snpVCFdir}/${snpVCF}
+#bcftools view -c 1:minor ${vcfdir}/${allVCF} > ${snpVCFdir}/${snpVCF}
 
 
 ### NOTE: projection values must be in same order as populations are in your popFile (this isn't ideal -- at some point I am going to modify the easySFS script)
 # note that order is CA,AK,AL,COM,KUR 
-$easySFS -i $snpVCFdir/${snpVCF} -p $popfile -a -v --proj $projections -f -o $outdir
+$easySFS -i $vcfdir/${snpVCF} -p $popfile -a -v --proj $projections -f -o $outdir
 # test run only had --proj 20 (maybe just projects 1 population? will have to see)
 # -f forces overwrite of outdir
 # $bgzip ${vcf}
