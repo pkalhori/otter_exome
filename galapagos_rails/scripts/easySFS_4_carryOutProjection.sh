@@ -6,18 +6,17 @@
 #$ -e /u/scratch/p/pkalhori/rails
 #$ -m abe
 #$ -M pkalhori
+#$ -t 1-3:1
 
-####### Easy SFS
-#https://github.com/isaacovercast/easySFS
-#install:
-#git clone git@github.com:isaacovercast/easySFS.git
-#cd easySFS
-#chmod +x *.py
-#easySFS.py
+
 source /u/local/Modules/default/init/modules.sh
-module load python/2.7
+#module load python/2.7
 module load samtools
 module load bcftools
+module load anaconda3/2020.11
+. /u/local/apps/anaconda3/2020.11/etc/profile.d/conda.sh
+
+conda activate dadi
 #bgzip=/u/home/a/ab08028/klohmueldata/annabel_data/bin/tabix-0.2.6/bgzip
 #todaysdate=20181212
 todaysdate=`date +%Y%m%d`
@@ -56,9 +55,9 @@ mkdir -p $outdir
 echo "PIN : $projections " > $outdir/projectionChoices.${todaysdate}.txt
 # make sure vcf isn't zipped
 
-allVCF=Neutral_sites_SFS_ALL_1.vcf
+allVCF=Neutral_sites_SFS_ALL_${SGE_TASK_ID}.vcf
 #extract only SNPs
-snpVCF=Neutral_sites_SNPs_only_1.vcf
+snpVCF=Neutral_sites_SNPs_only_${SGE_TASK_ID}.vcf
 #bcftools view -c 1:minor ${vcfdir}/${allVCF} > ${snpVCFdir}/${snpVCF}
 
 
@@ -70,5 +69,5 @@ $easySFS -i $vcfdir/${snpVCF} -p $popfile -a -v --proj $projections -f -o $outdi
 # $bgzip ${vcf}
 # then do for SYN and MIS (eventually)
 ########## get counts of monomorphic sites to add to the SFSes ############
-python $scriptdir/getMonomorphicProjectionCounts.1D.2DSFS.py --vcf $vcfdir/${allSitesvcf} --popMap $pops --proj $projections --popIDs PIN --outdir $outdir
+python $scriptdir/getMonomorphicProjectionCounts.1D.2DSFS.py --vcf $vcfdir/${allVCF} --popMap $popFile --proj $projections --popIDs PIN --outdir $outdir
 
