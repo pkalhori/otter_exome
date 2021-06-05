@@ -4,7 +4,7 @@
 easysfs.py from https://raw.githubusercontent.com/isaacovercast/easySFS/master/easySFS.py
 modified by annabel beichman -- november 2018
 so that sites that are 0/1 across a population get excluded
-and so that there isn't an interactive portion of the script that stops it running remotely 
+and so that there isn't an interactive portion of the script that stops it running remotely
 this script only retains bi-allelic SNPs.
 #### note: you must have your projection values be in the same order as the populations are in your popMap file ########
 '''
@@ -78,7 +78,7 @@ def dadi_oneD_sfs_per_pop(dd, pops, proj, unfold, outdir, prefix, dtype):
         fsc_oneD_filename = os.path.join(fsc_dir, pop+"_{}AFpop0.obs".format(M_or_D))
         with open(fsc_oneD_filename, 'w') as outfile:
             outfile.write("1 observation\n")
-            outfile.write("\t".join(["d0_"+str(x) for x in xrange(proj[i]+1)]) + "\n")
+            outfile.write("\t".join(["d0_"+str(x) for x in range(proj[i]+1)]) + "\n")
             ## Grab the fs data from the dadi sfs
             with open(dadi_sfs_file) as infile:
                 outfile.write(infile.readlines()[1])
@@ -122,20 +122,20 @@ def dadi_twoD_sfs_combinations(dd, pops, proj, unfold, outdir, prefix, dtype, ve
         with open(fsc_twoD_filename, 'w') as outfile:
             outfile.write("1 observation\n")
             ## Format column headers (i.e. d0_0 d0_1 d0_2 .. d0_n for deme 0 up to sample size of n)
-            outfile.write("\t" + "\t".join(["d{}_".format(popidx[pair[0]]) + str(x) for x in xrange(projPairs[i][1]+1)]) + "\n") 
+            outfile.write("\t" + "\t".join(["d{}_".format(popidx[pair[0]]) + str(x) for x in range(projPairs[i][1]+1)]) + "\n")
 
             ## Format row headers
-            row_headers = ["d{}_".format(popidx[pair[1]]) + str(x) for x in xrange(projPairs[i][0]+1)]
+            row_headers = ["d{}_".format(popidx[pair[1]]) + str(x) for x in range(projPairs[i][0]+1)]
             ## Read in the joint fs from dadi and format it nice for fsc
             with open(dadi_joint_filename) as infile:
                 ## Get the second line of the dadi-style sfs which contains the data
                 row_data = infile.readlines()[1].split()
                 ## The length of each row is determined by the number of columns which == the size of the projection for pop2
-                ## Have to add 1 to the value of the projection because xrange stops after 'n' elements
+                ## Have to add 1 to the value of the projection because range stops after 'n' elements
                 ## but we want all n+1 elements from 0,1,2,..,n
                 row_size = projPairs[i][1] + 1
                 ## Slice the row data into evenly sized chunks based on the number of columns
-                rows = [row_data[i:i + row_size] for i in xrange(0, len(row_data), row_size)]
+                rows = [row_data[i:i + row_size] for i in range(0, len(row_data), row_size)]
                 ## Sanity check. Make sure the number of rows you got is the same number you're expecting
                 ## to get (# rows should == size of pop0 projection)
                 if not len(row_headers) == len(rows):
@@ -167,12 +167,12 @@ def dadi_multiSFS(dd, pops, proj, unfold, outdir, prefix, dtype):
 
     ## Write out the dadi file
     fs.to_file(dadi_multi_filename)
-    
+
     ## Convert to fsc multiSFS format
     fsc_multi_filename = os.path.join(fsc_dir, prefix + "_MSFS.obs")
     with open(fsc_multi_filename, 'w') as outfile:
         outfile.write("1 observations. No. of demes and sample sizes are on next line.\n")
-        outfile.write(str(len(pops)) + "\t" + " ".join([str(x) for x in proj]) + "\n") 
+        outfile.write(str(len(pops)) + "\t" + " ".join([str(x) for x in proj]) + "\n")
         with open(dadi_multi_filename) as infile:
             outfile.write(infile.readlines()[1])
             outfile.write("\n")
@@ -247,7 +247,7 @@ def dadi_to_momi(infile, outdir=None, verbose=False):
 
     ## Convert SFS bin style into momi config style
     configs = pd.DataFrame(index=range(len(counts)), columns=pops)
- 
+
     locus_info = []
     for i, c in enumerate(counts):
         ## (n-1) here because nbins in dadi sfs is n+1
@@ -275,7 +275,7 @@ def dadi_to_momi(infile, outdir=None, verbose=False):
 def oneD_sfs_per_pop(dd, pops, outdir, prefix):
     for pop in pops:
         allele_counts = [dd[x]["calls"][pop] for x in dd.keys()]
-#        print(allele_counts)        
+#        print(allele_counts)
         counts = Counter([x[1] for x in allele_counts])
         print(pop, counts)
         counts = Counter([x[0] for x in allele_counts])
@@ -297,13 +297,13 @@ def make_datadict(genotypes, pops, maxHetFilter,verbose=False,ploidy=1):
             pop_genotypes = [row[x].split(":")[0] for x in pops[pop]]
             ref_count = sum([x == "0" or x == "0/0" or x == "0|0" for x in pop_genotypes]) * ploidy
             alt_count = sum([x == "1" or x == "1/1" or x == "1|1" for x in pop_genotypes]) * ploidy
-            ## Haploids shouldn't have hets in the vcf 
+            ## Haploids shouldn't have hets in the vcf
             het_count = sum([x == "1/0" or x == "0/1" or x == "1|0" or x == "0|1" for x in pop_genotypes])
 
             ref_count += het_count
             alt_count += het_count
             # 20181121: AB adding a condition to account for sites that are 0/1 across all individuals in a population. don't want to include those sites as called, since they indicate some sort of problem. 20181122, AB updated her modification to account for lines with ./., which would mean that 0/1 might be all the calls, but might not equal the length of the genotypes. Instead adding a hom ref and hom alt count and saying if they are both zero (no 0/0 or 0/1 sites, but homAlt isn't zero it means that all available calls for that pop are 0/1)
-            # AB adding a hom count 
+            # AB adding a hom count
             homRef_count=sum([x == "0" or x == "0/0" or x == "0|0" for x in pop_genotypes])
             homAlt_count=sum([x == "1" or x == "1/1" or x == "1|1" for x in pop_genotypes])
             called_gts=sum([x!="./." for x in pop_genotypes])
@@ -335,10 +335,10 @@ def read_input(vcf_name, all_snps=False, verbose=False):
     cur_loc_number = -1
     cur_loc_snps = []
 
-    ## use gzip? 
+    ## use gzip?
     if vcf_name.endswith(".gz"):
         ofunc = gzip.open
-    else:  
+    else:
         ofunc = open
     infile = ofunc(vcf_name, 'r')
     lines = infile.readlines()
@@ -380,7 +380,7 @@ def read_input(vcf_name, all_snps=False, verbose=False):
         if len(loc_dict) == 1:
             msg = """
     VCF file uses non-standard Chrom/pos information.
-    We assume that Chrom indicates RAD loci and pos indicates snps within each locus 
+    We assume that Chrom indicates RAD loci and pos indicates snps within each locus
     The VCF file passed does not have rad locus info in the Chrom field.
 
     You can re-run the easySFS conversion with the `-a` flag to use all snps in the conversion."""
@@ -400,11 +400,11 @@ def get_inds_from_input(vcf_name, verbose):
     # Read in the vcf file and grab the line with the individual names
     # Add the 'U' to handle opening files in universal mode, squashes the
     # windows/mac/linux newline issue.
-    ## use gzip? 
+    ## use gzip?
     indnames = []
     if vcf_name.endswith(".gz"):
         ofunc = gzip.open
-    else:  
+    else:
         ofunc = open
     try:
         with ofunc(vcf_name, 'r') as infile:
@@ -431,18 +431,18 @@ def get_inds_from_input(vcf_name, verbose):
         raise Exception("No sample names found in the input vcf. Check vcf file formatting.")
     return indnames
 
-    
+
 def check_inputs(ind2pop, indnames, pops):
     ## Make sure all samples are present in both pops file and VCF, give the user the option
     ## to bail out if something is goofy
     pop_set = set(ind2pop.keys())
     vcf_set = set(indnames)
-    
+
     if not pop_set == vcf_set:
         print("\nSamples in pops file not present in VCF: {}\n"\
             .format(", ".join(pop_set.difference(vcf_set))))
         ## Remove the offending samples from ind2pop
-            
+
         map(ind2pop.pop, pop_set.difference(vcf_set))
         print("Samples in VCF not present in pops file: {}\n"\
             .format(", ".join(vcf_set.difference(pop_set))))
@@ -461,7 +461,7 @@ def check_inputs(ind2pop, indnames, pops):
                 pops.pop(k)
         # sanity check (AB - 20181206)
         for key,value in pops.items():
-            print(str(len(value)) + ' Surviving individuals for {0}: {1}\n'.format(key,value))        
+            print(str(len(value)) + ' Surviving individuals for {0}: {1}\n'.format(key,value))
         # AB: 20181121: removing this part of the script so that there isn't an interactive portion
         #cont = raw_input("\nContinue, excluding samples not in both pops file and VCF? (yes/no)\n")
         #while not cont in ["yes", "no"]:
@@ -483,12 +483,12 @@ def get_populations(pops_file, verbose=False):
         with open(pops_file, 'r') as popsfile:
             ind2pop = {}
             pops = OrderedDict()
-        
+
             lines = popsfile.readlines()
             ## Get all the populations
             for line in lines:
                 pops.setdefault(line.split()[1], [])
-        
+
             for line in lines:
                 ind = line.split()[0]
                 pop = line.split()[1]
@@ -504,7 +504,7 @@ def get_populations(pops_file, verbose=False):
         msg = """
     Problem reading populations file. The file should be plain text with one
     individual name and one population name per line, separated by any amount of
-    white space. There should be no header line in this file. 
+    white space. There should be no header line in this file.
     An example looks like this:
 
         ind1    pop1
@@ -525,37 +525,37 @@ def parse_command_line():
         epilog="""\n
     """)
 
-    parser.add_argument("-a", dest="all_snps", action='store_true', 
+    parser.add_argument("-a", dest="all_snps", action='store_true',
         help="Keep all snps within each RAD locus (ie. do _not_ randomly sample 1 snp per locus).")
 
-    parser.add_argument("-i", dest="vcf_name", required=True, 
+    parser.add_argument("-i", dest="vcf_name", required=True,
         help="name of the VCF input file being converted")
 
-    parser.add_argument("-p", dest="populations", required=True, 
+    parser.add_argument("-p", dest="populations", required=True,
         help="Input file containing population assignments per individual")
 
-    parser.add_argument("--proj", dest="projections", 
+    parser.add_argument("--proj", dest="projections",
         help="List of values for projecting populations down to different sample sizes")
 
     parser.add_argument("--preview", dest="preview", action='store_true',
         help="Preview the number of segragating sites per population for different projection values.")
 
-    parser.add_argument("-o", dest="outdir", default='output', 
+    parser.add_argument("-o", dest="outdir", default='output',
         help="Directory to write output SFS to")
 
     parser.add_argument("--ploidy", dest="ploidy", type=int, default=2,
         help="Specify ploidy. Default is 2. Only other option is 1 for haploid.")
 
-    parser.add_argument("--prefix", dest="prefix", 
+    parser.add_argument("--prefix", dest="prefix",
         help="Prefix for all output SFS files names.")
 
-    parser.add_argument("--unfolded", dest="unfolded", action='store_true', 
+    parser.add_argument("--unfolded", dest="unfolded", action='store_true',
         help="Generate unfolded SFS. This assumes that your vcf file is accurately polarized.")
 
     parser.add_argument("--dtype", dest="dtype", default="float",
         help="Data type for use in output sfs. Options are `int` and `float`. Default is `float`.")
 
-    parser.add_argument("--GQ", dest="GQual", 
+    parser.add_argument("--GQ", dest="GQual",
         help="minimum genotype quality tolerated", default=20)
 
     parser.add_argument("-f", dest="force", action='store_true',
@@ -563,7 +563,7 @@ def parse_command_line():
 
     parser.add_argument("-v", dest="verbose", action='store_true',
         help="Set verbosity. Dump tons of info to the screen")
-    
+
     parser.add_argument("-maxHetFilter", dest="maxHetFilter", default=1.0,
         help="Fraction of called genotypes per population that are heterozygous (0/1). e.g. -maxHetFilter 0.8 would exclude any site that has >=80% of called genotypes 0/1 within a population. Default is 1.0 which only removes sites that are all 0/1 within the population. If your SFS is U-shaped after projection, I recommend lowering the max threshold to .7-.9.")
 
@@ -633,7 +633,7 @@ def main():
         with open(os.path.join(args.outdir, "datadict.txt"), 'w') as outfile:
             for x,y in dd.items():
                 outfile.write(x+str(y)+"\n")
-    
+
     ## Do preview of various projections to determine good values
     if args.preview:
         dadi_preview_projections(dd, pops, ploidy=args.ploidy, fold=args.unfolded)
@@ -663,8 +663,8 @@ def main():
             ## Create momi-style sfs
             dadi_to_momi(infile=sfs_file, outdir=outdir, verbose=args.verbose)
         except:
-            ## Can't create momi file at this point because we're locked to python2 
-            ## because of dadi. 
+            ## Can't create momi file at this point because we're locked to python2
+            ## because of dadi.
             pass
 
     else:
@@ -672,4 +672,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
