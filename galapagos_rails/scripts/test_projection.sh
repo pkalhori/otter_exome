@@ -1,20 +1,11 @@
-#! /bin/bash
-#$ -cwd
-#$ -l rh7,h_data=50G
-#$ -N easySFSProjection2
-#$ -o /u/scratch/p/pkalhori/rails
-#$ -e /u/scratch/p/pkalhori/rails
-#$ -m abe
-#$ -M pkalhori
-#$ -t 1-35:1
 
 
 source /u/local/Modules/default/init/modules.sh
 #module load python/2.7
 module load samtools
 module load bcftools
-module load anaconda3/2020.11
-. /u/local/apps/anaconda3/2020.11/etc/profile.d/conda.sh
+module load anaconda3/2020.02
+. /u/local/apps/anaconda3/2020.02/etc/profile.d/conda.sh
 
 conda activate dadi
 #bgzip=/u/home/a/ab08028/klohmueldata/annabel_data/bin/tabix-0.2.6/bgzip
@@ -45,7 +36,7 @@ projections="14"
 ### NOTE: projection values must be in same order as populations are in your popFile (this isn't ideal -- at some point I am going to modify the easySFS script)
 # note that order is CA,AK,AL,COM,KUR 
 
-outdir=/u/scratch/p/pkalhori/rails/easySFS/projection-${todaysdate}/chromosome-${SGE_TASK_ID}
+outdir=/u/scratch/p/pkalhori/rails/easySFS/projection-${todaysdate}
 #snpVCFdir=/u/scratch/pkalhori/rails/snpVCFs
 mkdir -p $outdir
 #mkdir -p $snpVCFdir
@@ -55,9 +46,9 @@ mkdir -p $outdir
 echo "PIN : $projections " > $outdir/projectionChoices.${todaysdate}.txt
 # make sure vcf isn't zipped
 
-allVCF=Neutral_sites_SFS_ALL_${SGE_TASK_ID}.vcf
+allVCF=Neutral_sites_SFS_ALL_10.vcf
 #extract only SNPs
-snpVCF=Neutral_sites_SNPs_only_${SGE_TASK_ID}.vcf
+snpVCF=Neutral_sites_SNPs_only_10.vcf
 #bcftools view -c 1:minor ${vcfdir}/${allVCF} > ${snpVCFdir}/${snpVCF}
 
 

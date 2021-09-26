@@ -60,7 +60,7 @@ proj_outputFile.close()
 
 # get sample names
 def getSamplesFromVCF(filepath):
-    inVCF = gzip.open(filepath, 'r')
+    inVCF = open(filepath, 'r')
     samples=[]
     for line in inVCF:
         if line.startswith('##'):
@@ -177,7 +177,7 @@ ind2pop, samples, pops = check_inputs(ind2pop, samples, pops)
 # input: pops file resulting from check_inputs; your projection value; your vcf file
 def count_PassingMonomorphicSites(pops,projDict,VCF):
     print("beginning counts")
-    inVCF = gzip.open(VCF, 'r')
+    inVCF = open(VCF, 'r')
     inVCF.seek(0)
     # set up dictionary:
     countDict=dict()
