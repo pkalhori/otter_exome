@@ -16,6 +16,8 @@
 # this script produces a VCF file which you can parse 
 # not sure if I want fixed mutations to be included or not. I kind of think I do want them because I count them in my empirical data
 
+#module load gcc/4.9.5
+
 ######### run parameters -- change these across models ###########
 # want a total of 6000 blocks. so 60 instances of this script for one replicate.
 pop=$1
@@ -30,7 +32,7 @@ paper=$6
 ######### programs #########
 # load the proper gcc 
 source /u/local/Modules/default/init/modules.sh
-module load gcc/6.3.0
+module load gcc/4.9.5
 slim=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/software/slim_build/slim # location of slim
 
 ############## files and dirs ############
