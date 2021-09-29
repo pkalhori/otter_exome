@@ -56,7 +56,7 @@ chr=20
 # chunk gets set when you run slim (based on SGE task id) # or something?? how to do this part? I don't really want to make a separte slim script each time? have it be a -d thing maybe?
 # have to figure out the chunks/replicates situation.
 
-cat > $scriptdir/slim_elut_${model}_${pop}_DengLynch_hs.job << EOM
+cat > $scriptdir/slim_elut_${model}_${pop}_Kardos_hs.job << EOM
 
 // changes to make: apparently 1e-03 is reasonable between-gene recomb rate
 // and then want to make separate chromosomes with 0.5 between them (or just simulate them separately)
