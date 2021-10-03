@@ -14,7 +14,7 @@ outdir="/u/scratch/p/pkalhori/slim/R_load_calc/"
 #simdates=c(20190424,20190607)
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
 
-popModDates=c("CA/1D.3Epoch.LongerRecovery/20210927/")
+popModDates=c("AK/1D.5Epoch/20211001/")
 
 #popModDates=c("CA/1D.5Epoch/20210927/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 #/u/scratch/p/pkalhori/slim/concattedSummaries/CA/1D.3Epoch.LongerRecovery/20210927/Kardos_hs

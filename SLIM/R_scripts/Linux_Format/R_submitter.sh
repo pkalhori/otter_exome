@@ -14,7 +14,7 @@ wd=/u/scratch/p/pkalhori/slim/R_load_calc
 #mkdir -p $ld
 
 pathToScript=/u/home/p/pkalhori/project-klohmueldata/pooneh_data/github_repos/otter_exome/SLIM/R_scripts/Linux_Format
-myscript=load_calcs_1D_ExcludeFixedBurninVariants_DL.R
+myscript=load_calcs_1D_ExcludeFixedBurninVariants_Kardos.R
 
 source /u/local/Modules/default/init/modules.sh
 module load R
