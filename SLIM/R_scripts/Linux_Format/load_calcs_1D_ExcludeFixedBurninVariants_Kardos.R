@@ -5,9 +5,9 @@ require(ggplot2)
 #library(tidyverse)
 library(dplyr)
 todaysdate=format(Sys.Date(),format="%Y%m%d")
-
+#data.dir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\"
 data.dir="/u/scratch/p/pkalhori/slim/concattedSummaries/"
-outdir="/u/scratch/p/pkalhori/slim/R_load_calc/"
+#outdir="/u/scratch/p/pkalhori/slim/R_load_calc/"
 #plot.dir="/Users/annabelbeichman/Documents/UCLA/Otters/OtterExomeProject/results/analysisResults/slim/poonehSimulations/loadCalcs/"
 #dir.create(plot.dir)
 #pops=c("AK","AL","genericPop.LongerContract")
@@ -15,11 +15,10 @@ outdir="/u/scratch/p/pkalhori/slim/R_load_calc/"
 #simdates=c(20190424,20190607)
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
 
-#popModDates=c("AK/1D.5Epoch/20210121/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
+#popModDates=c("CA\\1D.3Epoch.LongerRecovery\\20210927\\") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 
 #popModDates=c("CA_AK/2D.3Epoch.NoTranslocation/20210127/", "CA_AK/2D.3Epoch.Translocation.1perGen/20210127/","CA_AK/2D.3Epoch.Translocation.25perGen/20210127/", "CA_AK/2D.3Epoch.Translocation.25for2Gen/20210127/")
-#reps=c(seq(1,23))
-reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
+
 #hset=c("DengLynch_hs", "Henn_hs")
 #states=c("PreContraction","PostContraction")
 
@@ -36,9 +35,10 @@ for(popModDate in popModDates){
   for(rep in reps){
     print(rep)
     # check if rep exists (some have random hoffman failures)
-    infile=paste(data.dir,popModDate,"DengLynch_hs/replicate_",rep,".slim.output.allConcatted.summary.txt.gz",sep="")
+    infile=paste(data.dir,popModDate,"Kardos_hs/replicate_",rep,".slim.output.allConcatted.summary.txt.gz",sep="")
     if(file.exists(infile)){
       input = read.table(infile,sep=",",header=T)
+      
       print("file exists")
       # want to exclude sites that are at frequency 1 *prior* to the bottleneck
       pop= unlist(lapply(strsplit(popModDate,"/"),"[",1))
@@ -46,8 +46,12 @@ for(popModDate in popModDates){
       # give each mutation a unique ID that is their chunk (ie chromosome #) and mutid
       # you need this because mutIDs can be duplicated between chunks, but not within a chunk
       input$h <- NA
-      input$h <- 0.5 * exp(-13*abs(input$s))
-      input$htype <- "DengLynch"
+      input[input$type=="m2",]$h <- 0.5 * exp(-13*abs(input[input$type=="m2",]$s))
+      input[input$type=="m1",]$h <- 0.5
+      input[input$type=="m3",]$h <- 0
+
+
+      input$htype <- "Kardos"
 
       input$chunk.mutID <- paste(input$chunk,".",input$mutid,sep="")
       fixedToRemove <- input[(input$gen==0 & input$numhom==input$popsizeDIP),]$chunk.mutID # ~4000 sites per replicate. cool
@@ -100,8 +104,8 @@ for(popModDate in popModDates){
     }}}
 
 
-write.table(allAvgdInputs,paste(outdir,todaysdate,"_DengLynch_AvgHomozygousDerivedGTs.PerInd.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
-write.table(allLoads,paste(outdir,todaysdate,"_DengLynch_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
+write.table(allAvgdInputs,paste(outdir,todaysdate,"_Kardos_AvgHomozygousDerivedGTs.PerInd.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
+write.table(allLoads,paste(outdir,todaysdate,"_Kardos_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep=""),row.names = F,col.names = T,quote=F,sep="\t")
 
 
 
