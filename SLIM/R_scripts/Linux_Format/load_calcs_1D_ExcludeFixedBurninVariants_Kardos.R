@@ -7,7 +7,7 @@ library(dplyr)
 todaysdate=format(Sys.Date(),format="%Y%m%d")
 #data.dir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\"
 data.dir="/u/scratch/p/pkalhori/slim/concattedSummaries/"
-#outdir="/u/scratch/p/pkalhori/slim/R_load_calc/"
+outdir="/u/scratch/p/pkalhori/slim/R_load_calc/"
 #plot.dir="/Users/annabelbeichman/Documents/UCLA/Otters/OtterExomeProject/results/analysisResults/slim/poonehSimulations/loadCalcs/"
 #dir.create(plot.dir)
 #pops=c("AK","AL","genericPop.LongerContract")
@@ -15,14 +15,14 @@ data.dir="/u/scratch/p/pkalhori/slim/concattedSummaries/"
 #simdates=c(20190424,20190607)
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
 
-#popModDates=c("CA\\1D.3Epoch.LongerRecovery\\20210927\\") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
-
+popModDates=c("AK/1D.5Epoch/20211001/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
+#/u/scratch/p/pkalhori/slim/concattedSummaries/CA/1D.3Epoch.LongerRecovery/20210927/Kardos_hs
 #popModDates=c("CA_AK/2D.3Epoch.NoTranslocation/20210127/", "CA_AK/2D.3Epoch.Translocation.1perGen/20210127/","CA_AK/2D.3Epoch.Translocation.25perGen/20210127/", "CA_AK/2D.3Epoch.Translocation.25for2Gen/20210127/")
 
 #hset=c("DengLynch_hs", "Henn_hs")
 #states=c("PreContraction","PostContraction")
 
-popModDates=c("CA/1D.3Epoch.LongerRecovery/20210927/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
+#popModDates=c("CA/1D.3Epoch.LongerRecovery/20210927/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 
 
 reps=c(seq(1,25)) # some reps don't make it through Hoffman; so I have a file.exists() test in the loop to skip reps that didn't yield output
@@ -36,6 +36,7 @@ for(popModDate in popModDates){
     print(rep)
     # check if rep exists (some have random hoffman failures)
     infile=paste(data.dir,popModDate,"Kardos_hs/replicate_",rep,".slim.output.allConcatted.summary.txt.gz",sep="")
+	print(infile)
     if(file.exists(infile)){
       input = read.table(infile,sep=",",header=T)
       
