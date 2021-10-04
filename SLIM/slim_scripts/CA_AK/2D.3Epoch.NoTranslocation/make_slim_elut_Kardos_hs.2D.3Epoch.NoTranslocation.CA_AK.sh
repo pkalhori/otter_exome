@@ -255,6 +255,8 @@ $((${t} + 1)):$((${t} + 1+ ${tdiv})) late() {
 				type = "m1";
 			} else if (type == m2){
 				type = "m2";
+			} else if (type == m3){
+				type = "m3";
 			}
 			//print results
 		writeFile(paste(c(outdir,"/slim.output.",v_CHUNK,".summary.txt"),sep=""),paste(c(v_REP,v_CHUNK,generation,id,type,s,age,originpop,popID,pnumhet,pnumhom,popsize),sep=","),append=T);
@@ -317,6 +319,8 @@ $((${t} + 2+ ${tdiv})): late() {
 				type = "m1";
 			} else if (type == m2){
 				type = "m2";
+			} else if (type == m3){
+				type = "m3";
 			}
 			//print results
 		writeFile(paste(c(outdir,"/slim.output.",v_CHUNK,".summary.txt"),sep=""),paste(c(v_REP,v_CHUNK,generation,id,type,s,age,originpop,popID,pnumhet,pnumhom,popsize),sep=","),append=T);
