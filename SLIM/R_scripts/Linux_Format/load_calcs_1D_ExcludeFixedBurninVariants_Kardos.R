@@ -6,6 +6,7 @@ require(ggplot2)
 library(dplyr)
 todaysdate=format(Sys.Date(),format="%Y%m%d")
 data.dir="/u/scratch/p/pkalhori/slim/concattedSummaries/"
+#data.dir="C:\\Users\\poone\\OneDrive\\Documents\\Otter_Exome_Project\\SLIM_results\\"
 outdir="/u/scratch/p/pkalhori/slim/R_load_calc/"
 #plot.dir="/Users/annabelbeichman/Documents/UCLA/Otters/OtterExomeProject/results/analysisResults/slim/poonehSimulations/loadCalcs/"
 #dir.create(plot.dir)
@@ -14,7 +15,7 @@ outdir="/u/scratch/p/pkalhori/slim/R_load_calc/"
 #simdates=c(20190424,20190607)
 # skipping AL "AL/1D.2Epoch.1.5Mb.cds/20190424/" and CA etc -- add those in next 
 
-popModDates=c("AK/1D.5Epoch/20211001/")
+popModDates=c("CA/1D.3Epoch.LongerRecovery/20210927/")
 
 #popModDates=c("CA/1D.5Epoch/20210927/") # AK and AL have dadi parameters, genericPop has parameters based on AK MLE grid that is fur-trade relevant. ### need to come up with better classification system for this. 
 #/u/scratch/p/pkalhori/slim/concattedSummaries/CA/1D.3Epoch.LongerRecovery/20210927/Kardos_hs
@@ -72,7 +73,7 @@ for(popModDate in popModDates){
       inputWithFixedRemoved$popModDate <- popModDate
       inputWithFixedRemoved$sCat <- NA
       # JAR categories from her 2018 paper
-      inputWithFixedRemoved[inputWithFixedRemoved$s >= -1 & inputWithFixedRemoved$s < -0.01,]$sCat <- "strongly deleterious"
+      inputWithFixedRemoved[inputWithFixedRemoved$s < -0.01,]$sCat <- "strongly deleterious"
       inputWithFixedRemoved[inputWithFixedRemoved$s >= -0.01 & inputWithFixedRemoved$s < -0.001,]$sCat <- "moderately deleterious"
       inputWithFixedRemoved[inputWithFixedRemoved$s >= -0.001 & inputWithFixedRemoved$s < 0,]$sCat <- "weakly deleterious"
       inputWithFixedRemoved[inputWithFixedRemoved$s==0,]$sCat <- "neutral"

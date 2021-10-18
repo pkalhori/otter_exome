@@ -12,16 +12,12 @@ popModDate=c("CA_AK\\2D.3Epoch.Translocation\\20210131\\")
 popModDate2=c("CA_AK\\2D.3Epoch.Translocation\\20191113\\")
 
 ##removing burn in
-allLoads_DengLynch<- read.table(paste(data.dir,popModDate,"20210131_DengLynch_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+allLoads<- read.table(paste(data.dir,"20211004_2D_Kardos_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
 
-allLoads_Henn<- read.table(paste(data.dir,popModDate,"20210201_Henn_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+#allLoads_Henn<- read.table(paste(data.dir,popModDate,"20210201_Henn_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
-scratch_nomig <- allLoads_Henn[allLoads_Henn$model=="2D.3Epoch.Translocation.25for2Gen",]
 
-length(unique(scratch_nomig$replicate))
-
-allLoads <- rbind(allLoads_Henn, allLoads_DengLynch)
 
 
 
@@ -32,8 +28,6 @@ allLoads <- allLoads[allLoads$generation>=4000,]
 allLoads$subpop[allLoads$subpop==1] <- "AK"
 allLoads$subpop[allLoads$subpop==2] <- "CA"
 
-allLoads_no_migration$subpopulation[allLoads_no_migration$subpop==1] <- "AK"
-allLoads_no_migration$subpopulation[allLoads_no_migration$subpop==2] <- "CA"
 
 
 
@@ -103,12 +97,13 @@ p2 <-
   xlab("Generation") +
   theme(legend.position = "left")+
   ggtitle("Genetic Load for 2D Models")+
-  facet_grid(htype~interaction(subpop),scales="free")
+  facet_grid(htype~interaction(subpop),scales="free")+
+  geom_vline(data=dates_df, aes(xintercept=dates))
   #facet_grid(allLoads_means_se$subpop~.)
 
 #stat_summary(fun.data = allLoads_means_se, geom = "errorbar")+
 #geom_errorbar(data=allLoads_means_se, mapping=aes(ymin=lower_limit,ymax=upper_limit),color="green",size=0.1)
-# geom_vline(data=dates_df, aes(xintercept=dates))
+# 
 
 #theme(legend.title=element_blank())
 plot(allLoads$L[y= allLoads$subpop==1 & allLoads$migLabel=="No Migrants"& allLoads$replicate==1 & allLoads$h==0], x=allLoads$generation[allLoads$subpop==1 & allLoads$migLabel=="No Migrants" & allLoads$replicate==1 & allLoads$h==0])

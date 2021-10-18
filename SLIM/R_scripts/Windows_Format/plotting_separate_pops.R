@@ -10,21 +10,24 @@ popModDate=c("CA\\1D.3Epoch.LongerRecovery\\20210205\\")
 ##AK
 
 
-allLoads_Henn<- read.table(paste(data.dir,"20210131_Henn_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+allLoads_CA<- read.table(paste(data.dir,"20211003_CA_Kardos_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+
+allLoads_CA_old <- read.table(paste(data.dir,"20210206_DengLynch_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+
+allLoads_AK<- read.table(paste(data.dir,"20211003_Kardos_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
+
+#allLoads_DengLynch <- read.table(paste(data.dir,popModDate,"20210206_DengLynch_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
 
-allLoads_DengLynch <- read.table(paste(data.dir,popModDate,"20210206_DengLynch_LoadPerGeneration.ThroughTime.AllReps.RemovedBurninFixedVar.txt",sep = ""), header = T)
 
-
-
-allLoads<- rbind.data.frame(allLoads_Henn,allLoads_DengLynch)
+allLoads<- rbind.data.frame(allLoads_CA, allLoads_CA_old)
 scratch <- allLoads_Henn[allLoads_Henn$population=="CA",] 
 length(unique(scratch$replicate))
 
 # label H:
 
-allLoads$hLabel[allLoads$h==0] <- paste("Recessive")
-allLoads$hLabel[allLoads$h==0.5] <- paste("Additive")
+#allLoads$hLabel[allLoads$h==0] <- paste("Recessive")
+#allLoads$hLabel[allLoads$h==0.5] <- paste("Additive")
 
 
 AK <- c(36)
@@ -42,7 +45,7 @@ dates_df <- data.frame(
   years = c(36,36)
 )
 allLoads_means_se <- allLoads %>% 
-  group_by(generation,htype,population) %>% # Group the data by manufacturer
+  group_by(generation,population,htype) %>% # Group the data by manufacturer
   summarize(mean_load=mean(L), # Create variable with mean of cty per group
             sd_load=sd(L), # Create variable with sd of cty per group
             N_load=n(), # Create new variable N of cty per group
@@ -95,7 +98,7 @@ Pre_Contraction/Post_Contraction
 
 
 AK <- 
-  ggplot(allLoads_means_se,aes(x=generation,y=mean_load,color=htype))+
+  ggplot(allLoads_means_se,aes(x=generation,y=mean_load, color=htype))+
   geom_line(position=position_dodge(.5),size = 1,alpha=0.5)+
   #stat_summary(fun.y = "mean", geom = "point", size = 1, color=model)+
   #stat_summary(fun.y = "mean", geom = "line", size = 0.5)+
@@ -108,8 +111,8 @@ AK <-
   facet_grid(~population,scales="free")+
   
   #stat_summary(fun.data = allLoads_means_se, geom = "errorbar")+
-  geom_errorbar(data=allLoads_means_se, mapping=aes(ymin=lower_limit,ymax=upper_limit),size=0.1)+
-  geom_vline(xintercept=36)
+  geom_errorbar(data=allLoads_means_se, mapping=aes(ymin=lower_limit,ymax=upper_limit),size=0.1)
+  #geom_vline(xintercept=36)
   #geom_vline(xintercept=50)+
   #geom_vline(xintercept=56)
 
